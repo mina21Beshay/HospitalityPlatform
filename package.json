@@ -1,0 +1,23 @@
+{
+  "name": "hospitalityplatform",
+  "version": "1.0.0",
+  "description": "COP 4331 Large Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/COP4331-Group-19/HospitalityPlatform.git"
+  },
+  "author": "Group 19",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/COP4331-Group-19/HospitalityPlatform/issues"
+  },
+  "homepage": "https://github.com/COP4331-Group-19/HospitalityPlatform#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.6.9"
+  }
+}

@@ -1,0 +1,1 @@
+hospitalityplatform: npm start
