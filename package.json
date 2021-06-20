@@ -2,9 +2,10 @@
   "name": "hospitalityplatform",
   "version": "1.0.0",
   "description": "COP 4331 Large Project",
-  "main": "index.js",
+  "main": "api/index.js",
   "scripts": {
-    "test": "nodemon index.js"
+    "test": "nodemon api/index.js",
+    "start": "node api/index.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/COP4331-Group-19/HospitalityPlatform#readme",
   "dependencies": {
+    "async": "^3.2.0",
     "express": "^4.17.1",
     "mongodb": "^3.6.9"
   }
