@@ -12,7 +12,7 @@ const async = require("async");
 
 // Note: make sure you authenticate correctly!
 // const MongoClient = require('mongodb').MongoClient;
-// const uri = "mongodb+srv://hosp_usr:BSSQagv0UxI8lgCl@hospitality.sovk0.mongodb.net/users?retryWrites=true&w=majority";
+// const uri = "mongodb+srv://hosp_usr:see_discord@hospitality.sovk0.mongodb.net/users?retryWrites=true&w=majority";
 // const db_client = new MongoClient(uri, { useNewUrlParser: true });
 
 console.log(`[HospitalityPlatform] Server running on port ${port}`);
