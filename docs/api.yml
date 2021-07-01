@@ -1,0 +1,214 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: HospitalityPlatform API
+  description: The API documentation for HospitalityPlatform, a cross-platform customer service and hotel management platform.
+    <br><br>Please note that all API documentation will be done with a local instance of Swagger, will use OpenAPI 3.0.0, and [can be found on our GitHub](https://github.com/COP4331-Group-19/HospitalityPlatform).
+
+servers:
+  - description: Production
+    # TODO: Change URL.
+    url: https://hospitalityplatform.herokuapp.com/api/
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/jeffreydivi/HospitalityPlatform/1.0.0
+
+tags:
+  - name: Account
+    description: User accounts and profiles.
+  - name: Admin
+    description: Global settings and inventories for the whole instance.
+  - name: Guest
+    description: Operations to be done exclusively by guests.
+  - name: Staff
+    description: Operations to be done exclusively by staff.
+
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+  schemas:
+    Error404:
+      type: object
+      required:
+        - err_code
+        - description
+      properties:
+        err_code:
+          type: integer
+          description: A numeric error code.
+          example: 404
+        description:
+          type: string
+          description: A human-readable explanation of the error.
+          example: Asset not found.
+    Error403:
+      type: object
+      required:
+        - err_code
+        - description
+      properties:
+        err_code:
+          type: integer
+          description: A numeric error code.
+          example: 403
+        description:
+          type: string
+          description: A human-readable explanation of the error.
+          example: You do not have permission to view this asset.
+    Error401:
+      type: object
+      required:
+        - err_code
+        - description
+      properties:
+        err_code:
+          type: integer
+          description: A numeric error code.
+          example: 401
+        description:
+          type: string
+          description: A human-readable explanation of the error.
+          example: You are not logged in.
+    Error400:
+      type: object
+      required:
+        - err_code
+        - description
+      properties:
+        err_code:
+          type: integer
+          description: A numeric error code.
+          example: 400
+        description:
+          type: string
+          description: A human-readable explanation of the error.
+          example: Asset already exists.
+    EditUser:
+      type: object
+      required:
+        - username
+        - first_name
+      properties:
+        first_name:
+          type: string
+          description: The user's first name.
+          example: John
+        last_name:
+          type: string
+          description: The user's last name.
+          example: Smith
+        username:
+          type: string
+          description: The user's username.
+          example: jsmith
+      description: The user-editable sections of a user entry.
+    User:
+      allOf:
+        - type: object
+          required:
+            - user_id
+            - creation
+            - first_name
+          properties:
+            user_id:
+              type: integer
+              description: The user ID.
+              example: 7
+            creation:
+              type: string
+              format: date-time
+              description: The account's creation date and time.
+              example: Thu, 27 May 2021 19:56:01 GMT
+        - $ref: '#/components/schemas/EditUser'
+      description: A complete single user entry.
+
+security:
+  - Bearer: []
+
+paths:
+  /user/:
+    get:
+      tags:
+        - Account
+      operationId: get_user
+      description: Returns the authenticated user's profile.
+      responses:
+        '200':
+          description: Return the currently logged-in user's account information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: The user is not logged in.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+    post:
+      operationId: create_user
+      tags:
+        - Account
+      security: []
+      description: Create a new account.
+      requestBody:
+        description: Data for the new account.
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/EditUser'
+                - properties:
+                    password:
+                      type: string
+                      description: The user's password.
+                      example: CorrectHorseBatteryStaple
+                  required:
+                    - password
+      responses:
+        '200':
+          description: Returns the newly create user's data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Errs if the user already exists or another issue occurs during user acocunt creation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+    patch:
+      tags:
+        - Account
+      operationId: edit_user
+      description: Update the authenticated user's profile
+      requestBody:
+        required: true
+        description: The new user data. Provided fields will override existing ones.
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/EditUser'
+                - properties:
+                    password:
+                      type: string
+                      description: Set a new password.
+                      example: CorrectHorseBatteryStaple
+      responses:
+        '200':
+          description: Returns the updated user data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: The user is not logged in.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
