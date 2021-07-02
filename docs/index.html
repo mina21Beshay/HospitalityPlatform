@@ -1171,8 +1171,8 @@
                     <li data-group="Guest" data-name="getInventoryByInventoryId" class="">
                       <a href="#api-Guest-getInventoryByInventoryId">getInventoryByInventoryId</a>
                     </li>
-                    <li data-group="Guest" data-name="getInventoryByInventoryId_1" class="">
-                      <a href="#api-Guest-getInventoryByInventoryId_1">getInventoryByInventoryId_1</a>
+                    <li data-group="Guest" data-name="getInventoryByInventoryIdWithQuantity" class="">
+                      <a href="#api-Guest-getInventoryByInventoryIdWithQuantity">getInventoryByInventoryIdWithQuantity</a>
                     </li>
                     <li data-group="Guest" data-name="getRoom" class="">
                       <a href="#api-Guest-getRoom">getRoom</a>
@@ -1187,11 +1187,11 @@
                     <li data-group="Staff" data-name="getOrdersFulfillByOrderId" class="">
                       <a href="#api-Staff-getOrdersFulfillByOrderId">getOrdersFulfillByOrderId</a>
                     </li>
+                    <li data-group="Staff" data-name="getOrdersMy" class="">
+                      <a href="#api-Staff-getOrdersMy">getOrdersMy</a>
+                    </li>
                     <li data-group="Staff" data-name="getOrdersUnclaimed" class="">
                       <a href="#api-Staff-getOrdersUnclaimed">getOrdersUnclaimed</a>
-                    </li>
-                    <li data-group="Staff" data-name="getOrdersUnclaimed_1" class="">
-                      <a href="#api-Staff-getOrdersUnclaimed_1">getOrdersUnclaimed_1</a>
                     </li>
           </ul>
         </nav>
@@ -6851,7 +6851,7 @@ except ApiException as e:
                       <article id="api-Guest-getInventoryByInventoryId-0" data-group="User" data-name="getInventoryByInventoryId" data-version="0">
                         <div class="pull-left">
                           <h1>getInventoryByInventoryId</h1>
-                          <p>Orders an inventory item to a user&#x27;s room.</p>
+                          <p>Get information on a specific inventory entry.</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -6859,7 +6859,7 @@ except ApiException as e:
                         <p class="marked"></p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/inventory/{inventory_id}/{quantity}</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/inventory/{inventory_id}</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
@@ -6882,7 +6882,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
  -H "Authorization: Bearer [[accessToken]]"\
 -H "Accept: application/json"\
-"https://hospitalityplatform.herokuapp.com/api/inventory/{inventory_id}/{quantity}"</code></pre>
+"https://hospitalityplatform.herokuapp.com/api/inventory/{inventory_id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Guest-getInventoryByInventoryId-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -6901,9 +6901,8 @@ public class GuestApiExample {
 
         GuestApi apiInstance = new GuestApi();
         Integer inventoryId = 56; // Integer | Inventory item's ID
-        Integer quantity = 56; // Integer | Amount of items to order.
         try {
-            Order result = apiInstance.getInventoryByInventoryId(inventoryId, quantity);
+            Inventory result = apiInstance.getInventoryByInventoryId(inventoryId);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling GuestApi#getInventoryByInventoryId");
@@ -6921,9 +6920,8 @@ public class GuestApiExample {
     public static void main(String[] args) {
         GuestApi apiInstance = new GuestApi();
         Integer inventoryId = 56; // Integer | Inventory item's ID
-        Integer quantity = 56; // Integer | Amount of items to order.
         try {
-            Order result = apiInstance.getInventoryByInventoryId(inventoryId, quantity);
+            Inventory result = apiInstance.getInventoryByInventoryId(inventoryId);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling GuestApi#getInventoryByInventoryId");
@@ -6939,14 +6937,12 @@ public class GuestApiExample {
                             <div class="tab-pane" id="examples-Guest-getInventoryByInventoryId-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
 Integer *inventoryId = 56; // Inventory item's ID
-Integer *quantity = 56; // Amount of items to order.
 
 GuestApi *apiInstance = [[GuestApi alloc] init];
 
-// Orders an inventory item to a user's room.
+// Get information on a specific inventory entry.
 [apiInstance getInventoryByInventoryIdWith:inventoryId
-    quantity:quantity
-              completionHandler: ^(Order output, NSError* error) {
+              completionHandler: ^(Inventory output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -6964,7 +6960,6 @@ var defaultClient = HospitalityPlatformApi.ApiClient.instance;
 
 var api = new HospitalityPlatformApi.GuestApi()
 var inventoryId = 56; // {{Integer}} Inventory item's ID
-var quantity = 56; // {{Integer}} Amount of items to order.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -6973,7 +6968,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.getInventoryByInventoryId(inventoryId, quantity, callback);
+api.getInventoryByInventoryId(inventoryId, callback);
 </code></pre>
                             </div>
 
@@ -6997,12 +6992,11 @@ namespace Example
 
             var apiInstance = new GuestApi();
             var inventoryId = 56;  // Integer | Inventory item's ID
-            var quantity = 56;  // Integer | Amount of items to order.
 
             try
             {
-                // Orders an inventory item to a user's room.
-                Order result = apiInstance.getInventoryByInventoryId(inventoryId, quantity);
+                // Get information on a specific inventory entry.
+                Inventory result = apiInstance.getInventoryByInventoryId(inventoryId);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -7022,10 +7016,9 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiGuestApi();
 $inventoryId = 56; // Integer | Inventory item's ID
-$quantity = 56; // Integer | Amount of items to order.
 
 try {
-    $result = $api_instance->getInventoryByInventoryId($inventoryId, $quantity);
+    $result = $api_instance->getInventoryByInventoryId($inventoryId);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling GuestApi->getInventoryByInventoryId: ', $e->getMessage(), PHP_EOL;
@@ -7041,10 +7034,9 @@ use WWW::SwaggerClient::GuestApi;
 
 my $api_instance = WWW::SwaggerClient::GuestApi->new();
 my $inventoryId = 56; # Integer | Inventory item's ID
-my $quantity = 56; # Integer | Amount of items to order.
 
 eval { 
-    my $result = $api_instance->getInventoryByInventoryId(inventoryId => $inventoryId, quantity => $quantity);
+    my $result = $api_instance->getInventoryByInventoryId(inventoryId => $inventoryId);
     print Dumper($result);
 };
 if ($@) {
@@ -7063,11 +7055,10 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.GuestApi()
 inventoryId = 56 # Integer | Inventory item's ID
-quantity = 56 # Integer | Amount of items to order.
 
 try: 
-    # Orders an inventory item to a user's room.
-    api_response = api_instance.get_inventory_by_inventory_id(inventoryId, quantity)
+    # Get information on a specific inventory entry.
+    api_response = api_instance.get_inventory_by_inventory_id(inventoryId)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling GuestApi->getInventoryByInventoryId: %s\n" % e)</code></pre>
@@ -7104,28 +7095,6 @@ except ApiException as e:
                                       </div>
                                   </td>
                                   </tr>
-                                  <tr><td style="width:150px;">quantity*</td>
-                                  <td>
-                                  
-                                  
-                                      <div id="d2e199_getInventoryByInventoryId_quantity">
-                                          <div class="json-schema-view">
-                                              <div class="primitive">
-                                                  <span class="type">
-                                                      Integer
-                                                  </span>
-                                  
-                                                      <div class="inner description">
-                                                          Amount of items to order.
-                                                      </div>
-                                              </div>
-                                                  <div class="inner required">
-                                                      Required
-                                                  </div>
-                                          </div>
-                                      </div>
-                                  </td>
-                                  </tr>
                             </table>
 
 
@@ -7133,7 +7102,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Orders an inventory item to a user&#x27;s room. </h3>
+                            <h3> Status: 200 - Returns the requested inventory entry. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
@@ -7148,11 +7117,11 @@ except ApiException as e:
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Orders an inventory item to a user's room.",
+  "description" : "Returns the requested inventory entry.",
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/Order"
+        "$ref" : "#/components/schemas/Inventory"
       }
     }
   }
@@ -7184,11 +7153,11 @@ except ApiException as e:
                         </article>
                       </div>
                       <hr>
-                    <div id="api-Guest-getInventoryByInventoryId_1">
-                      <article id="api-Guest-getInventoryByInventoryId_1-0" data-group="User" data-name="getInventoryByInventoryId_1" data-version="0">
+                    <div id="api-Guest-getInventoryByInventoryIdWithQuantity">
+                      <article id="api-Guest-getInventoryByInventoryIdWithQuantity-0" data-group="User" data-name="getInventoryByInventoryIdWithQuantity" data-version="0">
                         <div class="pull-left">
-                          <h1>getInventoryByInventoryId_1</h1>
-                          <p>Get information on a specific inventory entry.</p>
+                          <h1>getInventoryByInventoryIdWithQuantity</h1>
+                          <p>Orders an inventory item to a user&#x27;s room.</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -7196,32 +7165,32 @@ except ApiException as e:
                         <p class="marked"></p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/inventory/{inventory_id}</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/inventory/{inventory_id}/{quantity}</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Guest-getInventoryByInventoryId_1-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Guest-getInventoryByInventoryId_1-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Guest-getInventoryByInventoryId_1-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Guest-getInventoryByInventoryId_1-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Guest-getInventoryByInventoryId_1-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Guest-getInventoryByInventoryId_1-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Guest-getInventoryByInventoryId_1-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Guest-getInventoryByInventoryId_1-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Guest-getInventoryByInventoryId_1-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Guest-getInventoryByInventoryId_1-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Guest-getInventoryByInventoryId_1-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Guest-getInventoryByInventoryIdWithQuantity-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Guest-getInventoryByInventoryIdWithQuantity-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Guest-getInventoryByInventoryIdWithQuantity-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Guest-getInventoryByInventoryIdWithQuantity-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Guest-getInventoryByInventoryIdWithQuantity-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Guest-getInventoryByInventoryIdWithQuantity-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Guest-getInventoryByInventoryIdWithQuantity-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Guest-getInventoryByInventoryIdWithQuantity-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Guest-getInventoryByInventoryIdWithQuantity-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Guest-getInventoryByInventoryIdWithQuantity-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Guest-getInventoryByInventoryIdWithQuantity-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Guest-getInventoryByInventoryId_1-0-curl">
+                          <div class="tab-pane active" id="examples-Guest-getInventoryByInventoryIdWithQuantity-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
  -H "Authorization: Bearer [[accessToken]]"\
 -H "Accept: application/json"\
-"https://hospitalityplatform.herokuapp.com/api/inventory/{inventory_id}"</code></pre>
+"https://hospitalityplatform.herokuapp.com/api/inventory/{inventory_id}/{quantity}"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Guest-getInventoryByInventoryId_1-0-java">
+                          <div class="tab-pane" id="examples-Guest-getInventoryByInventoryIdWithQuantity-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -7238,18 +7207,19 @@ public class GuestApiExample {
 
         GuestApi apiInstance = new GuestApi();
         Integer inventoryId = 56; // Integer | Inventory item's ID
+        Integer quantity = 56; // Integer | Amount of items to order.
         try {
-            Inventory result = apiInstance.getInventoryByInventoryId_0(inventoryId);
+            Order result = apiInstance.getInventoryByInventoryIdWithQuantity(inventoryId, quantity);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling GuestApi#getInventoryByInventoryId_0");
+            System.err.println("Exception when calling GuestApi#getInventoryByInventoryIdWithQuantity");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Guest-getInventoryByInventoryId_1-0-android">
+                          <div class="tab-pane" id="examples-Guest-getInventoryByInventoryIdWithQuantity-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.GuestApi;
 
 public class GuestApiExample {
@@ -7257,29 +7227,32 @@ public class GuestApiExample {
     public static void main(String[] args) {
         GuestApi apiInstance = new GuestApi();
         Integer inventoryId = 56; // Integer | Inventory item's ID
+        Integer quantity = 56; // Integer | Amount of items to order.
         try {
-            Inventory result = apiInstance.getInventoryByInventoryId_0(inventoryId);
+            Order result = apiInstance.getInventoryByInventoryIdWithQuantity(inventoryId, quantity);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling GuestApi#getInventoryByInventoryId_0");
+            System.err.println("Exception when calling GuestApi#getInventoryByInventoryIdWithQuantity");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Guest-getInventoryByInventoryId_1-0-groovy">
+  <div class="tab-pane" id="examples-Guest-getInventoryByInventoryIdWithQuantity-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Guest-getInventoryByInventoryId_1-0-objc">
+                            <div class="tab-pane" id="examples-Guest-getInventoryByInventoryIdWithQuantity-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
 Integer *inventoryId = 56; // Inventory item's ID
+Integer *quantity = 56; // Amount of items to order.
 
 GuestApi *apiInstance = [[GuestApi alloc] init];
 
-// Get information on a specific inventory entry.
-[apiInstance getInventoryByInventoryId_1With:inventoryId
-              completionHandler: ^(Inventory output, NSError* error) {
+// Orders an inventory item to a user's room.
+[apiInstance getInventoryByInventoryIdWithQuantityWith:inventoryId
+    quantity:quantity
+              completionHandler: ^(Order output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -7290,13 +7263,14 @@ GuestApi *apiInstance = [[GuestApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Guest-getInventoryByInventoryId_1-0-javascript">
+                            <div class="tab-pane" id="examples-Guest-getInventoryByInventoryIdWithQuantity-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
 var defaultClient = HospitalityPlatformApi.ApiClient.instance;
 
 
 var api = new HospitalityPlatformApi.GuestApi()
 var inventoryId = 56; // {{Integer}} Inventory item's ID
+var quantity = 56; // {{Integer}} Amount of items to order.
 
 var callback = function(error, data, response) {
   if (error) {
@@ -7305,14 +7279,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.getInventoryByInventoryId_0(inventoryId, callback);
+api.getInventoryByInventoryIdWithQuantity(inventoryId, quantity, callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Guest-getInventoryByInventoryId_1-0-angular">
+                            <!--<div class="tab-pane" id="examples-Guest-getInventoryByInventoryIdWithQuantity-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Guest-getInventoryByInventoryId_1-0-csharp">
+                            <div class="tab-pane" id="examples-Guest-getInventoryByInventoryIdWithQuantity-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -7321,7 +7295,7 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class getInventoryByInventoryId_0Example
+    public class getInventoryByInventoryIdWithQuantityExample
     {
         public void main()
         {
@@ -7329,16 +7303,17 @@ namespace Example
 
             var apiInstance = new GuestApi();
             var inventoryId = 56;  // Integer | Inventory item's ID
+            var quantity = 56;  // Integer | Amount of items to order.
 
             try
             {
-                // Get information on a specific inventory entry.
-                Inventory result = apiInstance.getInventoryByInventoryId_0(inventoryId);
+                // Orders an inventory item to a user's room.
+                Order result = apiInstance.getInventoryByInventoryIdWithQuantity(inventoryId, quantity);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling GuestApi.getInventoryByInventoryId_0: " + e.Message );
+                Debug.Print("Exception when calling GuestApi.getInventoryByInventoryIdWithQuantity: " + e.Message );
             }
         }
     }
@@ -7346,24 +7321,25 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Guest-getInventoryByInventoryId_1-0-php">
+                            <div class="tab-pane" id="examples-Guest-getInventoryByInventoryIdWithQuantity-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
 $api_instance = new Swagger\Client\ApiGuestApi();
 $inventoryId = 56; // Integer | Inventory item's ID
+$quantity = 56; // Integer | Amount of items to order.
 
 try {
-    $result = $api_instance->getInventoryByInventoryId_0($inventoryId);
+    $result = $api_instance->getInventoryByInventoryIdWithQuantity($inventoryId, $quantity);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling GuestApi->getInventoryByInventoryId_0: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling GuestApi->getInventoryByInventoryIdWithQuantity: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Guest-getInventoryByInventoryId_1-0-perl">
+                            <div class="tab-pane" id="examples-Guest-getInventoryByInventoryIdWithQuantity-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::GuestApi;
@@ -7371,17 +7347,18 @@ use WWW::SwaggerClient::GuestApi;
 
 my $api_instance = WWW::SwaggerClient::GuestApi->new();
 my $inventoryId = 56; # Integer | Inventory item's ID
+my $quantity = 56; # Integer | Amount of items to order.
 
 eval { 
-    my $result = $api_instance->getInventoryByInventoryId_0(inventoryId => $inventoryId);
+    my $result = $api_instance->getInventoryByInventoryIdWithQuantity(inventoryId => $inventoryId, quantity => $quantity);
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling GuestApi->getInventoryByInventoryId_0: $@\n";
+    warn "Exception when calling GuestApi->getInventoryByInventoryIdWithQuantity: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Guest-getInventoryByInventoryId_1-0-python">
+                            <div class="tab-pane" id="examples-Guest-getInventoryByInventoryIdWithQuantity-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -7392,13 +7369,14 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.GuestApi()
 inventoryId = 56 # Integer | Inventory item's ID
+quantity = 56 # Integer | Amount of items to order.
 
 try: 
-    # Get information on a specific inventory entry.
-    api_response = api_instance.get_inventory_by_inventory_id_0(inventoryId)
+    # Orders an inventory item to a user's room.
+    api_response = api_instance.get_inventory_by_inventory_id_with_quantity(inventoryId, quantity)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling GuestApi->getInventoryByInventoryId_0: %s\n" % e)</code></pre>
+    print("Exception when calling GuestApi->getInventoryByInventoryIdWithQuantity: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -7414,7 +7392,7 @@ except ApiException as e:
                                   <td>
                                   
                                   
-                                      <div id="d2e199_getInventoryByInventoryId_1_inventoryId">
+                                      <div id="d2e199_getInventoryByInventoryIdWithQuantity_inventoryId">
                                           <div class="json-schema-view">
                                               <div class="primitive">
                                                   <span class="type">
@@ -7432,6 +7410,28 @@ except ApiException as e:
                                       </div>
                                   </td>
                                   </tr>
+                                  <tr><td style="width:150px;">quantity*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_getInventoryByInventoryIdWithQuantity_quantity">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      Integer
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          Amount of items to order.
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
                             </table>
 
 
@@ -7439,26 +7439,26 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Returns the requested inventory entry. </h3>
+                            <h3> Status: 200 - Orders an inventory item to a user&#x27;s room. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-getInventoryByInventoryId_1-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-getInventoryByInventoryIdWithQuantity-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-getInventoryByInventoryId_1-200-schema">
-                                  <div id='responses-getInventoryByInventoryId_1-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-getInventoryByInventoryIdWithQuantity-200-schema">
+                                  <div id='responses-getInventoryByInventoryIdWithQuantity-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Returns the requested inventory entry.",
+  "description" : "Orders an inventory item to a user's room.",
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/Inventory"
+        "$ref" : "#/components/schemas/Order"
       }
     }
   }
@@ -7476,14 +7476,14 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-getInventoryByInventoryId_1-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-getInventoryByInventoryId_1-200-schema-200');
+                                        $('#responses-getInventoryByInventoryIdWithQuantity-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getInventoryByInventoryIdWithQuantity-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-getInventoryByInventoryId_1-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-getInventoryByInventoryIdWithQuantity-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
@@ -8679,6 +8679,278 @@ except ApiException as e:
                         </article>
                       </div>
                       <hr>
+                    <div id="api-Staff-getOrdersMy">
+                      <article id="api-Staff-getOrdersMy-0" data-group="User" data-name="getOrdersMy" data-version="0">
+                        <div class="pull-left">
+                          <h1>getOrdersMy</h1>
+                          <p>Get a list of the logged-in user&#x27;s claimed orders.</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/orders/my/</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Staff-getOrdersMy-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Staff-getOrdersMy-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Staff-getOrdersMy-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Staff-getOrdersMy-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Staff-getOrdersMy-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Staff-getOrdersMy-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Staff-getOrdersMy-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Staff-getOrdersMy-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Staff-getOrdersMy-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Staff-getOrdersMy-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Staff-getOrdersMy-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Staff-getOrdersMy-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+ -H "Authorization: Bearer [[accessToken]]"\
+-H "Accept: application/json"\
+"https://hospitalityplatform.herokuapp.com/api/orders/my/"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Staff-getOrdersMy-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.StaffApi;
+
+import java.io.File;
+import java.util.*;
+
+public class StaffApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+
+        StaffApi apiInstance = new StaffApi();
+        try {
+            array[Order] result = apiInstance.getOrdersMy();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling StaffApi#getOrdersMy");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Staff-getOrdersMy-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.StaffApi;
+
+public class StaffApiExample {
+
+    public static void main(String[] args) {
+        StaffApi apiInstance = new StaffApi();
+        try {
+            array[Order] result = apiInstance.getOrdersMy();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling StaffApi#getOrdersMy");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Staff-getOrdersMy-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Staff-getOrdersMy-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+StaffApi *apiInstance = [[StaffApi alloc] init];
+
+// Get a list of the logged-in user's claimed orders.
+[apiInstance getOrdersMyWithCompletionHandler: 
+              ^(array[Order] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Staff-getOrdersMy-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
+var defaultClient = HospitalityPlatformApi.ApiClient.instance;
+
+
+var api = new HospitalityPlatformApi.StaffApi()
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.getOrdersMy(callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Staff-getOrdersMy-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Staff-getOrdersMy-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class getOrdersMyExample
+    {
+        public void main()
+        {
+
+
+            var apiInstance = new StaffApi();
+
+            try
+            {
+                // Get a list of the logged-in user's claimed orders.
+                array[Order] result = apiInstance.getOrdersMy();
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling StaffApi.getOrdersMy: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Staff-getOrdersMy-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+$api_instance = new Swagger\Client\ApiStaffApi();
+
+try {
+    $result = $api_instance->getOrdersMy();
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling StaffApi->getOrdersMy: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Staff-getOrdersMy-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::StaffApi;
+
+
+my $api_instance = WWW::SwaggerClient::StaffApi->new();
+
+eval { 
+    my $result = $api_instance->getOrdersMy();
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling StaffApi->getOrdersMy: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Staff-getOrdersMy-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+
+# create an instance of the API class
+api_instance = swagger_client.StaffApi()
+
+try: 
+    # Get a list of the logged-in user's claimed orders.
+    api_response = api_instance.get_orders_my()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling StaffApi->getOrdersMy: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Returns all active orders. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getOrdersMy-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getOrdersMy-200-schema">
+                                  <div id='responses-getOrdersMy-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Returns all active orders.",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/Order"
+        },
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getOrdersMy-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getOrdersMy-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getOrdersMy-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
                     <div id="api-Staff-getOrdersUnclaimed">
                       <article id="api-Staff-getOrdersUnclaimed-0" data-group="User" data-name="getOrdersUnclaimed" data-version="0">
                         <div class="pull-left">
@@ -8945,278 +9217,6 @@ except ApiException as e:
                                     </script>
                                   </div>
                                   <input id='responses-getOrdersUnclaimed-200-schema-data' type='hidden' value=''></input>
-                                </div>
-                            </div>
-
-                        </article>
-                      </div>
-                      <hr>
-                    <div id="api-Staff-getOrdersUnclaimed_1">
-                      <article id="api-Staff-getOrdersUnclaimed_1-0" data-group="User" data-name="getOrdersUnclaimed_1" data-version="0">
-                        <div class="pull-left">
-                          <h1>getOrdersUnclaimed_1</h1>
-                          <p>Get a list of the logged-in user&#x27;s claimed orders.</p>
-                        </div>
-                        <div class="pull-right"></div>
-                        <div class="clearfix"></div>
-                        <p></p>
-                        <p class="marked"></p>
-                        <p></p>
-                        <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/orders/my/</span></code></pre>
-                        <p>
-                          <h3>Usage and SDK Samples</h3>
-                        </p>
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Staff-getOrdersUnclaimed_1-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Staff-getOrdersUnclaimed_1-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Staff-getOrdersUnclaimed_1-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Staff-getOrdersUnclaimed_1-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Staff-getOrdersUnclaimed_1-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Staff-getOrdersUnclaimed_1-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Staff-getOrdersUnclaimed_1-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Staff-getOrdersUnclaimed_1-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Staff-getOrdersUnclaimed_1-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Staff-getOrdersUnclaimed_1-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Staff-getOrdersUnclaimed_1-0-python">Python</a></li>
-                        </ul>
-
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Staff-getOrdersUnclaimed_1-0-curl">
-                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
- -H "Authorization: Bearer [[accessToken]]"\
--H "Accept: application/json"\
-"https://hospitalityplatform.herokuapp.com/api/orders/my/"</code></pre>
-                          </div>
-                          <div class="tab-pane" id="examples-Staff-getOrdersUnclaimed_1-0-java">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
-import io.swagger.client.auth.*;
-import io.swagger.client.model.*;
-import io.swagger.client.api.StaffApi;
-
-import java.io.File;
-import java.util.*;
-
-public class StaffApiExample {
-
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-
-
-        StaffApi apiInstance = new StaffApi();
-        try {
-            array[Order] result = apiInstance.getOrdersUnclaimed_0();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling StaffApi#getOrdersUnclaimed_0");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-
-                          <div class="tab-pane" id="examples-Staff-getOrdersUnclaimed_1-0-android">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.StaffApi;
-
-public class StaffApiExample {
-
-    public static void main(String[] args) {
-        StaffApi apiInstance = new StaffApi();
-        try {
-            array[Order] result = apiInstance.getOrdersUnclaimed_0();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling StaffApi#getOrdersUnclaimed_0");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-  <!--
-  <div class="tab-pane" id="examples-Staff-getOrdersUnclaimed_1-0-groovy">
-  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-  </div> -->
-                            <div class="tab-pane" id="examples-Staff-getOrdersUnclaimed_1-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
-
-StaffApi *apiInstance = [[StaffApi alloc] init];
-
-// Get a list of the logged-in user's claimed orders.
-[apiInstance getOrdersUnclaimed_1WithCompletionHandler: 
-              ^(array[Order] output, NSError* error) {
-                            if (output) {
-                                NSLog(@"%@", output);
-                            }
-                            if (error) {
-                                NSLog(@"Error: %@", error);
-                            }
-                        }];
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Staff-getOrdersUnclaimed_1-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
-var defaultClient = HospitalityPlatformApi.ApiClient.instance;
-
-
-var api = new HospitalityPlatformApi.StaffApi()
-var callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.getOrdersUnclaimed_0(callback);
-</code></pre>
-                            </div>
-
-                            <!--<div class="tab-pane" id="examples-Staff-getOrdersUnclaimed_1-0-angular">
-              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-            </div>-->
-                            <div class="tab-pane" id="examples-Staff-getOrdersUnclaimed_1-0-csharp">
-                              <pre class="prettyprint"><code class="language-cs">using System;
-using System.Diagnostics;
-using IO.Swagger.Api;
-using IO.Swagger.Client;
-using IO.Swagger.Model;
-
-namespace Example
-{
-    public class getOrdersUnclaimed_0Example
-    {
-        public void main()
-        {
-
-
-            var apiInstance = new StaffApi();
-
-            try
-            {
-                // Get a list of the logged-in user's claimed orders.
-                array[Order] result = apiInstance.getOrdersUnclaimed_0();
-                Debug.WriteLine(result);
-            }
-            catch (Exception e)
-            {
-                Debug.Print("Exception when calling StaffApi.getOrdersUnclaimed_0: " + e.Message );
-            }
-        }
-    }
-}
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Staff-getOrdersUnclaimed_1-0-php">
-                              <pre class="prettyprint"><code class="language-php"><&#63;php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-
-$api_instance = new Swagger\Client\ApiStaffApi();
-
-try {
-    $result = $api_instance->getOrdersUnclaimed_0();
-    print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling StaffApi->getOrdersUnclaimed_0: ', $e->getMessage(), PHP_EOL;
-}
-?></code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Staff-getOrdersUnclaimed_1-0-perl">
-                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
-use WWW::SwaggerClient::Configuration;
-use WWW::SwaggerClient::StaffApi;
-
-
-my $api_instance = WWW::SwaggerClient::StaffApi->new();
-
-eval { 
-    my $result = $api_instance->getOrdersUnclaimed_0();
-    print Dumper($result);
-};
-if ($@) {
-    warn "Exception when calling StaffApi->getOrdersUnclaimed_0: $@\n";
-}</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Staff-getOrdersUnclaimed_1-0-python">
-                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
-import time
-import swagger_client
-from swagger_client.rest import ApiException
-from pprint import pprint
-
-
-# create an instance of the API class
-api_instance = swagger_client.StaffApi()
-
-try: 
-    # Get a list of the logged-in user's claimed orders.
-    api_response = api_instance.get_orders_unclaimed_0()
-    pprint(api_response)
-except ApiException as e:
-    print("Exception when calling StaffApi->getOrdersUnclaimed_0: %s\n" % e)</code></pre>
-                            </div>
-                          </div>
-
-                          <h2>Parameters</h2>
-
-
-
-
-
-
-                          <h2>Responses</h2>
-                            <h3> Status: 200 - Returns all active orders. </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-getOrdersUnclaimed_1-200-schema">Schema</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-getOrdersUnclaimed_1-200-schema">
-                                  <div id='responses-getOrdersUnclaimed_1-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Returns all active orders.",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "type" : "array",
-        "items" : {
-          "$ref" : "#/components/schemas/Order"
-        },
-        "x-content-type" : "application/json"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["application/json"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-getOrdersUnclaimed_1-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-getOrdersUnclaimed_1-200-schema-200');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-getOrdersUnclaimed_1-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 

@@ -343,7 +343,7 @@ paths:
     get:
       tags:
         - Guest
-      operationId: get_inventory_by_inventory_id
+      operationId: get_inventory_by_inventory_id_with_quantity
       parameters:
         - name: inventory_id
           in: path
@@ -449,7 +449,7 @@ paths:
     get:
       tags:
         - Staff
-      operationId: get_orders_unclaimed
+      operationId: get_orders_my
       summary: Get a list of the logged-in user's claimed orders.
       responses:
         '200':
