@@ -16,7 +16,7 @@ servers:
   - url: https://virtserver.swaggerhub.com/jeffreydivi/HospitalityPlatform/1.0.0
     description: SwaggerHub API Auto Mocking
 paths:
-  /account/settings/:
+  /account/:
     get:
       tags:
         - Account
@@ -54,6 +54,7 @@ paths:
           links: {}
   /account/login/:
     post:
+      security: []
       summary: Create a session.
       requestBody:
         description: Account credentials
@@ -180,6 +181,325 @@ paths:
               schema:
                 $ref: '#/components/schemas/Hotel'
           description: Returns the hotel's metadata.
+  /room/:
+    get:
+      tags:
+        - Guest
+      operationId: get_room
+      summary: Get current room information.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+          description: Get current room information.
+  /room/{room_id}:
+    get:
+      tags:
+        - Admin
+      operationId: get_room_by_room_id
+      summary: Get room information by room number.
+      parameters:
+        - name: room_id
+          in: path
+          description: Room number
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+          description: Get room information by room number.
+    post:
+      tags:
+        - Admin
+      operationId: post_room_by_room_id
+      summary: Create a room with the given room number, if it does not yet exist.
+      parameters:
+        - name: room_id
+          in: path
+          description: Room number
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Room'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+          description: Returns the new room's information.
+    patch:
+      tags:
+        - Admin
+      operationId: patch_room_by_room_id
+      summary: Edit a preexisting room.
+      parameters:
+        - name: room_id
+          in: path
+          description: Room number
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Room'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+          description: Returns the updated room's information.
+    delete:
+      tags:
+        - Admin
+      operationId: delete_room_by_room_id
+      summary: Deletes a room.
+      parameters:
+        - name: room_id
+          in: path
+          description: Room number
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error200'
+          description: Returns a success message of the room's deletion.
+  /floor/{floor_number}:
+    get:
+      tags:
+        - Admin
+      operationId: get_floor_by_floor_number
+      summary: Get all rooms on a given floor.
+      parameters:
+        - name: floor_number
+          in: path
+          description: Floor number
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+          description: Returns all rooms on a given floor.
+  /inventory/:
+    get:
+      tags:
+        - Guest
+      operationId: get_inventory
+      summary: List all inventory items.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Inventory'
+          description: List all inventory items.
+    post:
+      tags:
+        - Admin
+      operationId: post_inventory
+      summary: Add an item to the inventory.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditInventory'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventory'
+          description: Returns the new inventory item's information.
+
+  /inventory/{inventory_id}/{quantity}:
+    get:
+      tags:
+        - Guest
+      operationId: get_inventory_by_inventory_id
+      parameters:
+        - name: inventory_id
+          in: path
+          description: Inventory item's ID
+          required: true
+          schema:
+            type: integer
+        - name: quantity
+          in: path
+          description: Amount of items to order.
+          required: true
+          schema:
+            type: integer
+      summary: Orders an inventory item to a user's room.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: Orders an inventory item to a user's room.
+  /inventory/{inventory_id}:
+    get:
+      tags:
+        - Staff
+        - Guest
+      operationId: get_inventory_by_inventory_id
+      summary: Get information on a specific inventory entry.
+      parameters:
+        - name: inventory_id
+          in: path
+          description: Inventory item's ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventory'
+          description: Returns the requested inventory entry.
+    patch:
+      tags:
+        - Admin
+      operationId: patch_inventory_by_inventory_id
+      summary: Edit a preexisting inventory item.
+      parameters:
+        - name: inventory_id
+          in: path
+          description: Inventory item's ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Inventory'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventory'
+          description: Returns the updated inventory entry's information.
+    delete:
+      tags:
+        - Admin
+      operationId: delete_inventory_by_inventory_id
+      summary: Deletes an inventory item.
+      parameters:
+        - name: inventory_id
+          in: path
+          description: Inventory item's ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error200'
+          description: Returns a success message of the inventory item's deletion.
+  /orders/unclaimed/:
+    get:
+      tags:
+        - Staff
+      operationId: get_orders_unclaimed
+      summary: Get a list of unclaimed orders.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+          description: Returns all unclaimed orders.
+  /orders/my/:
+    get:
+      tags:
+        - Staff
+      operationId: get_orders_unclaimed
+      summary: Get a list of the logged-in user's claimed orders.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+          description: Returns all active orders.
+  /orders/claim/{order_id}:
+    get:
+      tags:
+        - Staff
+      parameters:
+        - name: order_id
+          in: path
+          description: The order ID to claim.
+          required: true
+          schema:
+            type: integer
+      operationId: get_orders_claim_by_order_id
+      summary: Claim an order by its order ID.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: Returns the order claimed.
+  /orders/fulfill/{order_id}:
+    get:
+      tags:
+        - Staff
+      parameters:
+        - name: order_id
+          in: path
+          description: The order ID to mark as fulfilled.
+          required: true
+          schema:
+            type: integer
+      operationId: get_orders_fulfill_by_order_id
+      summary: Claim an order by its order ID.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error200'
+          description: Returns the order fulfilled.
 components:
   schemas:
     Error404:
@@ -367,7 +687,6 @@ components:
               description: The currently active room number.
               type: string
               example: 345P
-
         - $ref: '#/components/schemas/EditUser'
     Hotel:
       required:
@@ -381,6 +700,10 @@ components:
           description: The name of the hotel.
           type: string
           example: Disney's Hyperion Resort
+        color:
+          description: The hotel's color scheme.
+          type: string
+          example: '#ffc904'
         bkgd:
           description: A URL to an image.
           type: string
@@ -421,7 +744,107 @@ components:
           type: string
           description: A URL to the un-summarized term, likely written by real lawyers.
           example: https://o.divi.sh/terms/
-
+    Room:
+      required:
+        - room_id
+      type: object
+      properties:
+        room_id:
+          type: string
+          description: A unique string to identify the room.
+          example: 221B
+        occupant:
+          type: integer
+          description: The user ID of the current occupant. -1 if unoccupied.
+          example: 3
+        orders:
+          type: array
+          description: A list of active orders to the room.
+          items:
+            $ref: '#/components/schemas/Order'
+          example:
+            - item_id: 19
+              name: Extra Blankets
+              description: "*Need more blankets?* We'll get you some!"
+              img: https://i.divi.sh/hotel_inv/blankets.png
+              quantity: -1
+        floor:
+          type: integer
+          description: The floor the room is on.
+          example: 23
+    EditInventory:
+      required:
+        - item_id
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the item.
+          example: Extra Blankets
+        description:
+          type: string
+          description: A long-form description of the item, in Markdown.
+          example: "*Need more blankets?* We'll get you some!"
+        img:
+          type: string
+          description: A URL to an image of the item.
+          example: https://i.divi.sh/hotel_inv/blankets.png
+        quantity:
+          type: integer
+          description: How much of the item is in stock. -1 if infinite.
+          example: -1
+    Inventory:
+      allOf:
+        - required:
+            - item_id
+            - name
+            - quantity
+          properties:
+            item_id:
+              type: integer
+              description: A unique ID to itentify the item.
+              example: 19
+        - $ref: '#/components/schemas/EditInventory'
+    EditOrder:
+      required:
+        - item_id
+      type: object
+      properties:
+        item_id:
+          type: integer
+          description: The ID of the item ordered.
+          example: 19
+        quantity:
+          type: integer
+          description: The amount of an item ordered.
+          example: 1
+        guest:
+          type: integer
+          description: The user ID of the guest who ordered the item.
+          example: 7
+    Order:
+      allOf:
+        - required:
+            - order_id
+            - item_id
+            - quantity
+            - guest
+            - room_id
+            - staff
+          properties:
+            order_id:
+              type: integer
+              description: The ID of the order (task).
+              example: 104
+            room_id:
+              type: string
+              description: The room number to deliver the item to.
+              example: 221B
+            staff:
+              type: integer
+              description: The user ID of the employee to deliver the item. -1 if undefined.
+              example: 3
+        - $ref: '#/components/schemas/EditOrder'
   securitySchemes:
     Bearer:
       scheme: bearer
@@ -437,6 +860,6 @@ tags:
   - name: Admin
     description: Global settings and inventories for the whole instance.
   - name: Guest
-    description: Operations to be done exclusively by guests.
+    description: Operations to be done primarily by guests.
   - name: Staff
     description: Operations to be done exclusively by staff.
