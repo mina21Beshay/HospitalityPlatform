@@ -1,18 +1,298 @@
 openapi: 3.0.0
 info:
-  version: 1.0.0
   title: HospitalityPlatform API
-  description: The API documentation for HospitalityPlatform, a cross-platform customer service and hotel management platform.
-    <br><br>Please note that all API documentation will be done with a local instance of Swagger, will use OpenAPI 3.0.0, and [can be found on our GitHub](https://github.com/COP4331-Group-19/HospitalityPlatform).
-
+  version: 1.0.0
+  description: >-
+    The API documentation for HospitalityPlatform, a cross-platform customer
+    service and hotel management platform. <br><br>Please note that all API
+    documentation will be done with a local instance of Swagger, will use
+    OpenAPI 3.0.0, and [can be found on our
+    GitHub](https://github.com/COP4331-Group-19/HospitalityPlatform).
+  x-logo:
+    url: ''
 servers:
-  - description: Production
-    # TODO: Change URL.
-    url: https://hospitalityplatform.herokuapp.com/api/
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/jeffreydivi/HospitalityPlatform/1.0.0
+  - url: https://hospitalityplatform.herokuapp.com/api/
+    description: Production
+  - url: https://virtserver.swaggerhub.com/jeffreydivi/HospitalityPlatform/1.0.0
+    description: SwaggerHub API Auto Mocking
+paths:
+  /account/settings/:
+    get:
+      tags:
+        - Account
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: 'Get current account information and settings.'
+          x-last-modified: 1625106621162
+      operationId: get_account_settings
+      summary: Get current account information and settings.
+    patch:
+      requestBody:
+        description: Edit the current account's settings.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditUser'
+        required: false
+      tags:
+        - Account
+      operationId: patch_account_settings
+      summary: Edit the current account's settings.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          x-last-modified: 1625107207680
+          description: Edit the current account's settings.
+          headers: {}
+          links: {}
+  /account/login/:
+    post:
+      summary: Create a session.
+      requestBody:
+        description: Account credentials
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+        required: true
+      tags:
+        - Account
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewJWT'
+          description: Return the currently logged-in user's account information.
+      operationId: post_account_login
+      description: Given a username and password, returns a JWT for the session.
+  /account/roles/:
+    summary: View and manage an account's role (guest/staff/admin).
+    post:
+      tags:
+        - Admin
+      operationId: post_account_roles
+      summary: Get the role of a user, given just a username.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Role'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+          description: 'Get the role of a user.'
+          headers: {}
+          links: {}
+    patch:
+      tags:
+        - Admin
+      operationId: patch_account_roles
+      summary: Set the role of a user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Role'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+          description: 'Set the role of a user.'
+          headers: {}
+          links: {}
+components:
+  schemas:
+    Error404:
+      required:
+        - err_code
+        - description
+      type: object
+      properties:
+        err_code:
+          description: A numeric error code.
+          type: integer
+          example: 404
+        description:
+          description: A human-readable explanation of the error.
+          type: string
+          example: Asset not found.
+    Error403:
+      required:
+        - err_code
+        - description
+      type: object
+      properties:
+        err_code:
+          description: A numeric error code.
+          type: integer
+          example: 403
+        description:
+          description: A human-readable explanation of the error.
+          type: string
+          example: You do not have permission to view this asset.
+    Error401:
+      required:
+        - err_code
+        - description
+      type: object
+      properties:
+        err_code:
+          description: A numeric error code.
+          type: integer
+          example: 401
+        description:
+          description: A human-readable explanation of the error.
+          type: string
+          example: You are not logged in.
+    Error400:
+      required:
+        - err_code
+        - description
+      type: object
+      properties:
+        err_code:
+          description: A numeric error code.
+          type: integer
+          example: 400
+        description:
+          description: A human-readable explanation of the error.
+          type: string
+          example: Asset already exists.
+    Error200:
+      required:
+        - err_code
+        - description
+      type: object
+      properties:
+        err_code:
+          description: A numeric error code.
+          type: integer
+          example: 200
+        description:
+          description: A human-readable explanation of the error.
+          type: string
+          example: Success!
+    NewJWT:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          description: The Bearer token
+          type: string
+          example: Bearer V2UncmUgbm8gc3RyYW5nZXJzIHRvIGxvdmUuIFlvdSBub3cgdGhlIHJ1bGVzIGFuZCBzbyBkbyBJLg==
+    Credentials:
+      required:
+        - username
+        - password
+      type: object
+      properties:
+        username:
+          description: A username.
+          type: string
+          example: divi
+        password:
+          description: A password.
+          type: string
+          example: CorrectHorseBatteryStaple
+    Role:
+      required:
+        - username
+      type: object
+      properties:
+        username:
+          description: The username whom owns the role.
+          type: string
+          example: divi
+        role:
+          description: A given user's role.
+          type: string
+          example: admin
+    EditUser:
+      description: The user-editable sections of a user entry.
+      type: object
+      properties:
+        username:
+          description: The user's username
+          type: string
+          example: jdivincent
+        password:
+          description: The user's password, which will be hashed with bcrypt.
+          type: string
+          example: '**********'
+        first_name:
+          description: The user's first name
+          type: string
+          example: Jeffrey
+        last_name:
+          description: The user's surname.
+          type: string
+          example: DiVincent
+        email:
+          description: The user's email.
+          type: string
+          example: divi@example.com
+        phone:
+          description: The user's phone number, stored as an integer.
+          type: integer
+          example: 4078242000
+    User:
+      description: A complete single user entry.
+      allOf:
+        - required:
+            - user_id
+            - first_name
+            - username
+            - password
+            - role
+          type: object
+          properties:
+            user_id:
+              description: The user ID.
+              type: integer
+              example: 7
+            role:
+              description: The role of the account. Either admin, staff, or guest.
+              type: string
+              example: admin
+            checkin:
+              description: The currently active check-in date and time, stored in Unix time.
+              type: integer
+              example: 1625184007928
+            checkout:
+              description: The currently active check-out date and time, stored in Unix time.
+              type: integer
+              example: 1625184007929
+            room:
+              description: The currently active room number.
+              type: string
+              example: 345P
 
+        - $ref: '#/components/schemas/EditUser'
+  securitySchemes:
+    Bearer:
+      scheme: bearer
+      type: http
+  headers: {}
+  responses: {}
+  parameters: {}
+security:
+  - Bearer: []
 tags:
   - name: Account
     description: User accounts and profiles.
@@ -22,193 +302,3 @@ tags:
     description: Operations to be done exclusively by guests.
   - name: Staff
     description: Operations to be done exclusively by staff.
-
-components:
-  securitySchemes:
-    Bearer:
-      type: http
-      scheme: bearer
-  schemas:
-    Error404:
-      type: object
-      required:
-        - err_code
-        - description
-      properties:
-        err_code:
-          type: integer
-          description: A numeric error code.
-          example: 404
-        description:
-          type: string
-          description: A human-readable explanation of the error.
-          example: Asset not found.
-    Error403:
-      type: object
-      required:
-        - err_code
-        - description
-      properties:
-        err_code:
-          type: integer
-          description: A numeric error code.
-          example: 403
-        description:
-          type: string
-          description: A human-readable explanation of the error.
-          example: You do not have permission to view this asset.
-    Error401:
-      type: object
-      required:
-        - err_code
-        - description
-      properties:
-        err_code:
-          type: integer
-          description: A numeric error code.
-          example: 401
-        description:
-          type: string
-          description: A human-readable explanation of the error.
-          example: You are not logged in.
-    Error400:
-      type: object
-      required:
-        - err_code
-        - description
-      properties:
-        err_code:
-          type: integer
-          description: A numeric error code.
-          example: 400
-        description:
-          type: string
-          description: A human-readable explanation of the error.
-          example: Asset already exists.
-    EditUser:
-      type: object
-      required:
-        - username
-        - first_name
-      properties:
-        first_name:
-          type: string
-          description: The user's first name.
-          example: John
-        last_name:
-          type: string
-          description: The user's last name.
-          example: Smith
-        username:
-          type: string
-          description: The user's username.
-          example: jsmith
-      description: The user-editable sections of a user entry.
-    User:
-      allOf:
-        - type: object
-          required:
-            - user_id
-            - creation
-            - first_name
-          properties:
-            user_id:
-              type: integer
-              description: The user ID.
-              example: 7
-            creation:
-              type: string
-              format: date-time
-              description: The account's creation date and time.
-              example: Thu, 27 May 2021 19:56:01 GMT
-        - $ref: '#/components/schemas/EditUser'
-      description: A complete single user entry.
-
-security:
-  - Bearer: []
-
-paths:
-  /user/:
-    get:
-      tags:
-        - Account
-      operationId: get_user
-      description: Returns the authenticated user's profile.
-      responses:
-        '200':
-          description: Return the currently logged-in user's account information.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '401':
-          description: The user is not logged in.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-    post:
-      operationId: create_user
-      tags:
-        - Account
-      security: []
-      description: Create a new account.
-      requestBody:
-        description: Data for the new account.
-        required: true
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/EditUser'
-                - properties:
-                    password:
-                      type: string
-                      description: The user's password.
-                      example: CorrectHorseBatteryStaple
-                  required:
-                    - password
-      responses:
-        '200':
-          description: Returns the newly create user's data.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Errs if the user already exists or another issue occurs during user acocunt creation.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-    patch:
-      tags:
-        - Account
-      operationId: edit_user
-      description: Update the authenticated user's profile
-      requestBody:
-        required: true
-        description: The new user data. Provided fields will override existing ones.
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/EditUser'
-                - properties:
-                    password:
-                      type: string
-                      description: Set a new password.
-                      example: CorrectHorseBatteryStaple
-      responses:
-        '200':
-          description: Returns the updated user data.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '401':
-          description: The user is not logged in.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
