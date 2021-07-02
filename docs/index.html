@@ -689,54 +689,73 @@
   <script>
     // Script section to load models into a JS Var
     var defs = {}
-            defs["body"] = {
-  "allOf" : [ {
-    "$ref" : "#/components/schemas/EditUser"
-  }, {
-    "required" : [ "password" ],
-    "properties" : {
-      "password" : {
-        "type" : "string",
-        "description" : "The user's password.",
-        "example" : "CorrectHorseBatteryStaple"
-      }
-    }
-  } ]
-};
-            defs["body_1"] = {
-  "allOf" : [ {
-    "$ref" : "#/components/schemas/EditUser"
-  }, {
-    "properties" : {
-      "password" : {
-        "type" : "string",
-        "description" : "Set a new password.",
-        "example" : "CorrectHorseBatteryStaple"
-      }
-    }
-  } ]
-};
-            defs["EditUser"] = {
-  "required" : [ "first_name", "username" ],
+            defs["Credentials"] = {
+  "required" : [ "password", "username" ],
   "type" : "object",
   "properties" : {
+    "username" : {
+      "type" : "string",
+      "description" : "A username.",
+      "example" : "divi"
+    },
+    "password" : {
+      "type" : "string",
+      "description" : "A password.",
+      "example" : "CorrectHorseBatteryStaple"
+    }
+  }
+};
+            defs["EditUser"] = {
+  "type" : "object",
+  "properties" : {
+    "username" : {
+      "type" : "string",
+      "description" : "The user's username",
+      "example" : "jdivincent"
+    },
+    "password" : {
+      "type" : "string",
+      "description" : "The user's password, which will be hashed with bcrypt.",
+      "example" : "**********"
+    },
     "first_name" : {
       "type" : "string",
-      "description" : "The user's first name.",
-      "example" : "John"
+      "description" : "The user's first name",
+      "example" : "Jeffrey"
     },
     "last_name" : {
       "type" : "string",
-      "description" : "The user's last name.",
-      "example" : "Smith"
+      "description" : "The user's surname.",
+      "example" : "DiVincent"
     },
-    "username" : {
+    "email" : {
       "type" : "string",
-      "description" : "The user's username.",
-      "example" : "jsmith"
+      "description" : "The user's email.",
+      "example" : "divi@example.com"
+    },
+    "phone" : {
+      "type" : "integer",
+      "description" : "The user's phone number, stored as an integer.",
+      "example" : 4078242000
     }
   },
   "description" : "The user-editable sections of a user entry."
+};
+            defs["Error200"] = {
+  "required" : [ "description", "err_code" ],
+  "type" : "object",
+  "properties" : {
+    "err_code" : {
+      "type" : "integer",
+      "description" : "A numeric error code.",
+      "example" : 200
+    },
+    "description" : {
+      "type" : "string",
+      "description" : "A human-readable explanation of the error.",
+      "example" : "Success!"
+    }
+  }
 };
             defs["Error400"] = {
   "required" : [ "description", "err_code" ],
@@ -802,10 +821,97 @@
     }
   }
 };
+            defs["Hotel"] = {
+  "required" : [ "bkgd", "desc", "name", "terms" ],
+  "type" : "object",
+  "properties" : {
+    "name" : {
+      "type" : "string",
+      "description" : "The name of the hotel.",
+      "example" : "Disney's Hyperion Resort"
+    },
+    "bkgd" : {
+      "type" : "string",
+      "description" : "A URL to an image.",
+      "example" : "https://i.divi.sh/bkgd.png"
+    },
+    "desc" : {
+      "type" : "string",
+      "description" : "A long-form description of the hotel, in Markdown.",
+      "example" : "# Hello, world!"
+    },
+    "terms" : {
+      "type" : "array",
+      "description" : "A summarized form of the hotel's rules.",
+      "example" : [ {
+        "name" : "Don't break the law.",
+        "icon" : "fab fa-twitter",
+        "desc" : "Breaking the law is illegal. **So don't do it!**",
+        "url" : "https://o.divi.sh/terms/"
+      } ],
+      "items" : {
+        "$ref" : "#/components/schemas/Terms"
+      }
+    }
+  }
+};
+            defs["NewJWT"] = {
+  "required" : [ "token" ],
+  "type" : "object",
+  "properties" : {
+    "token" : {
+      "type" : "string",
+      "description" : "The Bearer token",
+      "example" : "Bearer V2UncmUgbm8gc3RyYW5nZXJzIHRvIGxvdmUuIFlvdSBub3cgdGhlIHJ1bGVzIGFuZCBzbyBkbyBJLg=="
+    }
+  }
+};
+            defs["Role"] = {
+  "required" : [ "username" ],
+  "type" : "object",
+  "properties" : {
+    "username" : {
+      "type" : "string",
+      "description" : "The username whom owns the role.",
+      "example" : "divi"
+    },
+    "role" : {
+      "type" : "string",
+      "description" : "A given user's role.",
+      "example" : "admin"
+    }
+  }
+};
+            defs["Terms"] = {
+  "required" : [ "desc", "name" ],
+  "type" : "object",
+  "properties" : {
+    "name" : {
+      "type" : "string",
+      "description" : "A description of the term.",
+      "example" : "Don't break the law."
+    },
+    "icon" : {
+      "type" : "string",
+      "description" : "A Font Awesome string to render the icon with.",
+      "example" : "fab fa-twitter"
+    },
+    "desc" : {
+      "type" : "string",
+      "description" : "A long-form description of the term, in Markdown.",
+      "example" : "Breaking the law is illegal. **So don't do it!**"
+    },
+    "url" : {
+      "type" : "string",
+      "description" : "A URL to the un-summarized term, likely written by real lawyers.",
+      "example" : "https://o.divi.sh/terms/"
+    }
+  }
+};
             defs["User"] = {
   "description" : "A complete single user entry.",
   "allOf" : [ {
-    "required" : [ "creation", "first_name", "user_id" ],
+    "required" : [ "first_name", "password", "role", "user_id", "username" ],
     "type" : "object",
     "properties" : {
       "user_id" : {
@@ -813,15 +919,56 @@
         "description" : "The user ID.",
         "example" : 7
       },
-      "creation" : {
+      "role" : {
         "type" : "string",
-        "description" : "The account's creation date and time.",
-        "format" : "date-time"
+        "description" : "The role of the account. Either admin, staff, or guest.",
+        "example" : "admin"
+      },
+      "checkin" : {
+        "type" : "integer",
+        "description" : "The currently active check-in date and time, stored in Unix time.",
+        "example" : 1625184007928
+      },
+      "checkout" : {
+        "type" : "integer",
+        "description" : "The currently active check-out date and time, stored in Unix time.",
+        "example" : 1625184007929
+      },
+      "room" : {
+        "type" : "string",
+        "description" : "The currently active room number.",
+        "example" : "345P"
       }
     }
   }, {
     "$ref" : "#/components/schemas/EditUser"
   } ]
+};
+            defs["UserStub"] = {
+  "type" : "object",
+  "properties" : {
+    "username" : {
+      "type" : "string",
+      "description" : "The user's username",
+      "example" : "jdivincent"
+    },
+    "first_name" : {
+      "type" : "string",
+      "description" : "The user's first name",
+      "example" : "Jeffrey"
+    },
+    "email" : {
+      "type" : "string",
+      "description" : "The user's email.",
+      "example" : "divi@example.com"
+    },
+    "phone" : {
+      "type" : "integer",
+      "description" : "The user's phone number, stored as an integer.",
+      "example" : 4078242000
+    }
+  },
+  "description" : "A bare-minimum user for account creation."
 };
   </script>
 
@@ -840,14 +987,33 @@
             <li class="nav-fixed nav-header active" data-group="_"><a href="#api-_">API Summary</a></li>
 
                   <li class="nav-header" data-group="Account"><a href="#api-Account">API Methods - Account</a></li>
-                    <li data-group="Account" data-name="createUser" class="">
-                      <a href="#api-Account-createUser">createUser</a>
+                    <li data-group="Account" data-name="getAccountSettings" class="">
+                      <a href="#api-Account-getAccountSettings">getAccountSettings</a>
                     </li>
-                    <li data-group="Account" data-name="editUser" class="">
-                      <a href="#api-Account-editUser">editUser</a>
+                    <li data-group="Account" data-name="patchAccountSettings" class="">
+                      <a href="#api-Account-patchAccountSettings">patchAccountSettings</a>
                     </li>
-                    <li data-group="Account" data-name="getUser" class="">
-                      <a href="#api-Account-getUser">getUser</a>
+                    <li data-group="Account" data-name="postAccountLogin" class="">
+                      <a href="#api-Account-postAccountLogin">postAccountLogin</a>
+                    </li>
+                  <li class="nav-header" data-group="Admin"><a href="#api-Admin">API Methods - Admin</a></li>
+                    <li data-group="Admin" data-name="getAccountAll" class="">
+                      <a href="#api-Admin-getAccountAll">getAccountAll</a>
+                    </li>
+                    <li data-group="Admin" data-name="getHotel" class="">
+                      <a href="#api-Admin-getHotel">getHotel</a>
+                    </li>
+                    <li data-group="Admin" data-name="patchAccountRoles" class="">
+                      <a href="#api-Admin-patchAccountRoles">patchAccountRoles</a>
+                    </li>
+                    <li data-group="Admin" data-name="patchHotel" class="">
+                      <a href="#api-Admin-patchHotel">patchHotel</a>
+                    </li>
+                    <li data-group="Admin" data-name="postAccountCreate" class="">
+                      <a href="#api-Admin-postAccountCreate">postAccountCreate</a>
+                    </li>
+                    <li data-group="Admin" data-name="postAccountRoles" class="">
+                      <a href="#api-Admin-postAccountRoles">postAccountRoles</a>
                     </li>
           </ul>
         </nav>
@@ -870,768 +1036,44 @@
         <div id="sections">
                 <section id="api-Account">
                   <h1>Account</h1>
-                    <div id="api-Account-createUser">
-                      <article id="api-Account-createUser-0" data-group="User" data-name="createUser" data-version="0">
+                    <div id="api-Account-getAccountSettings">
+                      <article id="api-Account-getAccountSettings-0" data-group="User" data-name="getAccountSettings" data-version="0">
                         <div class="pull-left">
-                          <h1>createUser</h1>
-                          <p></p>
+                          <h1>getAccountSettings</h1>
+                          <p>Get current account information and settings.</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Create a new account.</p>
+                        <p class="marked"></p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/user/</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/account/settings/</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Account-createUser-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Account-createUser-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Account-createUser-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Account-createUser-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Account-createUser-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Account-createUser-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Account-createUser-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Account-createUser-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Account-createUser-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Account-createUser-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Account-createUser-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Account-getAccountSettings-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Account-getAccountSettings-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Account-getAccountSettings-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Account-getAccountSettings-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Account-getAccountSettings-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Account-getAccountSettings-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Account-getAccountSettings-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Account-getAccountSettings-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Account-getAccountSettings-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Account-getAccountSettings-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Account-getAccountSettings-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Account-createUser-0-curl">
-                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
--H "Accept: application/json"\
--H "Content-Type: application/json"\
-"https://hospitalityplatform.herokuapp.com/api//user/"</code></pre>
-                          </div>
-                          <div class="tab-pane" id="examples-Account-createUser-0-java">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
-import io.swagger.client.auth.*;
-import io.swagger.client.model.*;
-import io.swagger.client.api.AccountApi;
-
-import java.io.File;
-import java.util.*;
-
-public class AccountApiExample {
-
-    public static void main(String[] args) {
-        
-        AccountApi apiInstance = new AccountApi();
-        Body body = ; // Body | Data for the new account.
-        try {
-            User result = apiInstance.createUser(body);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling AccountApi#createUser");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-
-                          <div class="tab-pane" id="examples-Account-createUser-0-android">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.AccountApi;
-
-public class AccountApiExample {
-
-    public static void main(String[] args) {
-        AccountApi apiInstance = new AccountApi();
-        Body body = ; // Body | Data for the new account.
-        try {
-            User result = apiInstance.createUser(body);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling AccountApi#createUser");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-  <!--
-  <div class="tab-pane" id="examples-Account-createUser-0-groovy">
-  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-  </div> -->
-                            <div class="tab-pane" id="examples-Account-createUser-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Body *body = ; // Data for the new account.
-
-AccountApi *apiInstance = [[AccountApi alloc] init];
-
-[apiInstance createUserWith:body
-              completionHandler: ^(User output, NSError* error) {
-                            if (output) {
-                                NSLog(@"%@", output);
-                            }
-                            if (error) {
-                                NSLog(@"Error: %@", error);
-                            }
-                        }];
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Account-createUser-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
-
-var api = new HospitalityPlatformApi.AccountApi()
-var body = ; // {{Body}} Data for the new account.
-
-var callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.createUser(body, callback);
-</code></pre>
-                            </div>
-
-                            <!--<div class="tab-pane" id="examples-Account-createUser-0-angular">
-              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-            </div>-->
-                            <div class="tab-pane" id="examples-Account-createUser-0-csharp">
-                              <pre class="prettyprint"><code class="language-cs">using System;
-using System.Diagnostics;
-using IO.Swagger.Api;
-using IO.Swagger.Client;
-using IO.Swagger.Model;
-
-namespace Example
-{
-    public class createUserExample
-    {
-        public void main()
-        {
-
-            var apiInstance = new AccountApi();
-            var body = new Body(); // Body | Data for the new account.
-
-            try
-            {
-                User result = apiInstance.createUser(body);
-                Debug.WriteLine(result);
-            }
-            catch (Exception e)
-            {
-                Debug.Print("Exception when calling AccountApi.createUser: " + e.Message );
-            }
-        }
-    }
-}
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Account-createUser-0-php">
-                              <pre class="prettyprint"><code class="language-php"><&#63;php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-$api_instance = new Swagger\Client\ApiAccountApi();
-$body = ; // Body | Data for the new account.
-
-try {
-    $result = $api_instance->createUser($body);
-    print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling AccountApi->createUser: ', $e->getMessage(), PHP_EOL;
-}
-?></code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Account-createUser-0-perl">
-                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
-use WWW::SwaggerClient::Configuration;
-use WWW::SwaggerClient::AccountApi;
-
-my $api_instance = WWW::SwaggerClient::AccountApi->new();
-my $body = WWW::SwaggerClient::Object::Body->new(); # Body | Data for the new account.
-
-eval { 
-    my $result = $api_instance->createUser(body => $body);
-    print Dumper($result);
-};
-if ($@) {
-    warn "Exception when calling AccountApi->createUser: $@\n";
-}</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Account-createUser-0-python">
-                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
-import time
-import swagger_client
-from swagger_client.rest import ApiException
-from pprint import pprint
-
-# create an instance of the API class
-api_instance = swagger_client.AccountApi()
-body =  # Body | Data for the new account.
-
-try: 
-    api_response = api_instance.create_user(body)
-    pprint(api_response)
-except ApiException as e:
-    print("Exception when calling AccountApi->createUser: %s\n" % e)</code></pre>
-                            </div>
-                          </div>
-
-                          <h2>Parameters</h2>
-
-
-
-                            <div class="methodsubtabletitle">Body parameters</div>
-                            <table id="methodsubtable">
-                              <tr>
-                                <th width="150px">Name</th>
-                                <th>Description</th>
-                              </tr>
-                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
-                                <td>
-                                
-                                
-                                <script>
-                                $(document).ready(function() {
-                                  var schemaWrapper = {
-  "description" : "Data for the new account.",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/body"
-      }
-    }
-  },
-  "required" : true
-};
-                                  var schema = schemaWrapper.content["application/json"].schema;
-                                  if (schema.$ref != null) {
-                                    schema = defsParser.$refs.get(schema.$ref);
-                                  } else {
-                                    schemaWrapper.components = {};
-                                    schemaWrapper.components.schemas = Object.assign({}, defs);
-                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                      console.log(err);
-                                    });
-                                  }
-                                
-                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
-                                  var result = $('#d2e199_createUser_body');
-                                  result.empty();
-                                  result.append(view.render());
-                                });
-                                </script>
-                                <div id="d2e199_createUser_body"></div>
-                                </td>
-                                </tr>
-                            </table>
-
-
-
-                          <h2>Responses</h2>
-                            <h3> Status: 200 - Returns the newly create user&#x27;s data. </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-createUser-200-schema">Schema</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-createUser-200-schema">
-                                  <div id='responses-createUser-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Returns the newly create user's data.",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/User"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["application/json"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-createUser-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-createUser-200-schema-200');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-createUser-200-schema-data' type='hidden' value=''></input>
-                                </div>
-                            </div>
-
-                            <h3> Status: 400 - Errs if the user already exists or another issue occurs during user acocunt creation. </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-createUser-400-schema">Schema</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-createUser-400-schema">
-                                  <div id='responses-createUser-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Errs if the user already exists or another issue occurs during user acocunt creation.",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error400"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["application/json"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-createUser-400-schema-data').val(stringify(schema));
-                                        var result = $('#responses-createUser-400-schema-400');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-createUser-400-schema-data' type='hidden' value=''></input>
-                                </div>
-                            </div>
-
-                        </article>
-                      </div>
-                      <hr>
-                    <div id="api-Account-editUser">
-                      <article id="api-Account-editUser-0" data-group="User" data-name="editUser" data-version="0">
-                        <div class="pull-left">
-                          <h1>editUser</h1>
-                          <p></p>
-                        </div>
-                        <div class="pull-right"></div>
-                        <div class="clearfix"></div>
-                        <p></p>
-                        <p class="marked">Update the authenticated user&#x27;s profile</p>
-                        <p></p>
-                        <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="patch"><code><span class="pln">/user/</span></code></pre>
-                        <p>
-                          <h3>Usage and SDK Samples</h3>
-                        </p>
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Account-editUser-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Account-editUser-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Account-editUser-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Account-editUser-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Account-editUser-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Account-editUser-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Account-editUser-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Account-editUser-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Account-editUser-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Account-editUser-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Account-editUser-0-python">Python</a></li>
-                        </ul>
-
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Account-editUser-0-curl">
-                           <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
- -H "Authorization: Bearer [[accessToken]]"\
--H "Accept: application/json"\
--H "Content-Type: application/json"\
-"https://hospitalityplatform.herokuapp.com/api//user/"</code></pre>
-                          </div>
-                          <div class="tab-pane" id="examples-Account-editUser-0-java">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
-import io.swagger.client.auth.*;
-import io.swagger.client.model.*;
-import io.swagger.client.api.AccountApi;
-
-import java.io.File;
-import java.util.*;
-
-public class AccountApiExample {
-
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-
-
-        AccountApi apiInstance = new AccountApi();
-        Body_1 body = ; // Body_1 | The new user data. Provided fields will override existing ones.
-        try {
-            User result = apiInstance.editUser(body);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling AccountApi#editUser");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-
-                          <div class="tab-pane" id="examples-Account-editUser-0-android">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.AccountApi;
-
-public class AccountApiExample {
-
-    public static void main(String[] args) {
-        AccountApi apiInstance = new AccountApi();
-        Body_1 body = ; // Body_1 | The new user data. Provided fields will override existing ones.
-        try {
-            User result = apiInstance.editUser(body);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling AccountApi#editUser");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-  <!--
-  <div class="tab-pane" id="examples-Account-editUser-0-groovy">
-  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-  </div> -->
-                            <div class="tab-pane" id="examples-Account-editUser-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
-Body_1 *body = ; // The new user data. Provided fields will override existing ones.
-
-AccountApi *apiInstance = [[AccountApi alloc] init];
-
-[apiInstance editUserWith:body
-              completionHandler: ^(User output, NSError* error) {
-                            if (output) {
-                                NSLog(@"%@", output);
-                            }
-                            if (error) {
-                                NSLog(@"Error: %@", error);
-                            }
-                        }];
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Account-editUser-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
-var defaultClient = HospitalityPlatformApi.ApiClient.instance;
-
-
-var api = new HospitalityPlatformApi.AccountApi()
-var body = ; // {{Body_1}} The new user data. Provided fields will override existing ones.
-
-var callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.editUser(body, callback);
-</code></pre>
-                            </div>
-
-                            <!--<div class="tab-pane" id="examples-Account-editUser-0-angular">
-              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-            </div>-->
-                            <div class="tab-pane" id="examples-Account-editUser-0-csharp">
-                              <pre class="prettyprint"><code class="language-cs">using System;
-using System.Diagnostics;
-using IO.Swagger.Api;
-using IO.Swagger.Client;
-using IO.Swagger.Model;
-
-namespace Example
-{
-    public class editUserExample
-    {
-        public void main()
-        {
-
-
-            var apiInstance = new AccountApi();
-            var body = new Body_1(); // Body_1 | The new user data. Provided fields will override existing ones.
-
-            try
-            {
-                User result = apiInstance.editUser(body);
-                Debug.WriteLine(result);
-            }
-            catch (Exception e)
-            {
-                Debug.Print("Exception when calling AccountApi.editUser: " + e.Message );
-            }
-        }
-    }
-}
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Account-editUser-0-php">
-                              <pre class="prettyprint"><code class="language-php"><&#63;php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-
-$api_instance = new Swagger\Client\ApiAccountApi();
-$body = ; // Body_1 | The new user data. Provided fields will override existing ones.
-
-try {
-    $result = $api_instance->editUser($body);
-    print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling AccountApi->editUser: ', $e->getMessage(), PHP_EOL;
-}
-?></code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Account-editUser-0-perl">
-                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
-use WWW::SwaggerClient::Configuration;
-use WWW::SwaggerClient::AccountApi;
-
-
-my $api_instance = WWW::SwaggerClient::AccountApi->new();
-my $body = WWW::SwaggerClient::Object::Body_1->new(); # Body_1 | The new user data. Provided fields will override existing ones.
-
-eval { 
-    my $result = $api_instance->editUser(body => $body);
-    print Dumper($result);
-};
-if ($@) {
-    warn "Exception when calling AccountApi->editUser: $@\n";
-}</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Account-editUser-0-python">
-                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
-import time
-import swagger_client
-from swagger_client.rest import ApiException
-from pprint import pprint
-
-
-# create an instance of the API class
-api_instance = swagger_client.AccountApi()
-body =  # Body_1 | The new user data. Provided fields will override existing ones.
-
-try: 
-    api_response = api_instance.edit_user(body)
-    pprint(api_response)
-except ApiException as e:
-    print("Exception when calling AccountApi->editUser: %s\n" % e)</code></pre>
-                            </div>
-                          </div>
-
-                          <h2>Parameters</h2>
-
-
-
-                            <div class="methodsubtabletitle">Body parameters</div>
-                            <table id="methodsubtable">
-                              <tr>
-                                <th width="150px">Name</th>
-                                <th>Description</th>
-                              </tr>
-                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
-                                <td>
-                                
-                                
-                                <script>
-                                $(document).ready(function() {
-                                  var schemaWrapper = {
-  "description" : "The new user data. Provided fields will override existing ones.",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/body_1"
-      }
-    }
-  },
-  "required" : true
-};
-                                  var schema = schemaWrapper.content["application/json"].schema;
-                                  if (schema.$ref != null) {
-                                    schema = defsParser.$refs.get(schema.$ref);
-                                  } else {
-                                    schemaWrapper.components = {};
-                                    schemaWrapper.components.schemas = Object.assign({}, defs);
-                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                      console.log(err);
-                                    });
-                                  }
-                                
-                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
-                                  var result = $('#d2e199_editUser_body');
-                                  result.empty();
-                                  result.append(view.render());
-                                });
-                                </script>
-                                <div id="d2e199_editUser_body"></div>
-                                </td>
-                                </tr>
-                            </table>
-
-
-
-                          <h2>Responses</h2>
-                            <h3> Status: 200 - Returns the updated user data. </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-editUser-200-schema">Schema</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-editUser-200-schema">
-                                  <div id='responses-editUser-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Returns the updated user data.",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/User"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["application/json"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-editUser-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-editUser-200-schema-200');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-editUser-200-schema-data' type='hidden' value=''></input>
-                                </div>
-                            </div>
-
-                            <h3> Status: 401 - The user is not logged in. </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-editUser-401-schema">Schema</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-editUser-401-schema">
-                                  <div id='responses-editUser-401-schema-401' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "The user is not logged in.",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error401"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["application/json"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-editUser-401-schema-data').val(stringify(schema));
-                                        var result = $('#responses-editUser-401-schema-401');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-editUser-401-schema-data' type='hidden' value=''></input>
-                                </div>
-                            </div>
-
-                        </article>
-                      </div>
-                      <hr>
-                    <div id="api-Account-getUser">
-                      <article id="api-Account-getUser-0" data-group="User" data-name="getUser" data-version="0">
-                        <div class="pull-left">
-                          <h1>getUser</h1>
-                          <p></p>
-                        </div>
-                        <div class="pull-right"></div>
-                        <div class="clearfix"></div>
-                        <p></p>
-                        <p class="marked">Returns the authenticated user&#x27;s profile.</p>
-                        <p></p>
-                        <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/user/</span></code></pre>
-                        <p>
-                          <h3>Usage and SDK Samples</h3>
-                        </p>
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Account-getUser-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Account-getUser-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Account-getUser-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Account-getUser-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Account-getUser-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Account-getUser-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Account-getUser-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Account-getUser-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Account-getUser-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Account-getUser-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Account-getUser-0-python">Python</a></li>
-                        </ul>
-
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Account-getUser-0-curl">
+                          <div class="tab-pane active" id="examples-Account-getAccountSettings-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
  -H "Authorization: Bearer [[accessToken]]"\
 -H "Accept: application/json"\
-"https://hospitalityplatform.herokuapp.com/api//user/"</code></pre>
+"https://hospitalityplatform.herokuapp.com/api/account/settings/"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Account-getUser-0-java">
+                          <div class="tab-pane" id="examples-Account-getAccountSettings-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -1648,17 +1090,17 @@ public class AccountApiExample {
 
         AccountApi apiInstance = new AccountApi();
         try {
-            User result = apiInstance.getUser();
+            User result = apiInstance.getAccountSettings();
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountApi#getUser");
+            System.err.println("Exception when calling AccountApi#getAccountSettings");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Account-getUser-0-android">
+                          <div class="tab-pane" id="examples-Account-getAccountSettings-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.AccountApi;
 
 public class AccountApiExample {
@@ -1666,25 +1108,26 @@ public class AccountApiExample {
     public static void main(String[] args) {
         AccountApi apiInstance = new AccountApi();
         try {
-            User result = apiInstance.getUser();
+            User result = apiInstance.getAccountSettings();
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountApi#getUser");
+            System.err.println("Exception when calling AccountApi#getAccountSettings");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Account-getUser-0-groovy">
+  <div class="tab-pane" id="examples-Account-getAccountSettings-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Account-getUser-0-objc">
+                            <div class="tab-pane" id="examples-Account-getAccountSettings-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
 
 AccountApi *apiInstance = [[AccountApi alloc] init];
 
-[apiInstance getUserWithCompletionHandler: 
+// Get current account information and settings.
+[apiInstance getAccountSettingsWithCompletionHandler: 
               ^(User output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -1696,7 +1139,7 @@ AccountApi *apiInstance = [[AccountApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Account-getUser-0-javascript">
+                            <div class="tab-pane" id="examples-Account-getAccountSettings-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
 var defaultClient = HospitalityPlatformApi.ApiClient.instance;
 
@@ -1709,14 +1152,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.getUser(callback);
+api.getAccountSettings(callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Account-getUser-0-angular">
+                            <!--<div class="tab-pane" id="examples-Account-getAccountSettings-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Account-getUser-0-csharp">
+                            <div class="tab-pane" id="examples-Account-getAccountSettings-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -1725,7 +1168,7 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class getUserExample
+    public class getAccountSettingsExample
     {
         public void main()
         {
@@ -1735,12 +1178,13 @@ namespace Example
 
             try
             {
-                User result = apiInstance.getUser();
+                // Get current account information and settings.
+                User result = apiInstance.getAccountSettings();
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling AccountApi.getUser: " + e.Message );
+                Debug.Print("Exception when calling AccountApi.getAccountSettings: " + e.Message );
             }
         }
     }
@@ -1748,7 +1192,7 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Account-getUser-0-php">
+                            <div class="tab-pane" id="examples-Account-getAccountSettings-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
@@ -1756,15 +1200,15 @@ require_once(__DIR__ . '/vendor/autoload.php');
 $api_instance = new Swagger\Client\ApiAccountApi();
 
 try {
-    $result = $api_instance->getUser();
+    $result = $api_instance->getAccountSettings();
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling AccountApi->getUser: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling AccountApi->getAccountSettings: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Account-getUser-0-perl">
+                            <div class="tab-pane" id="examples-Account-getAccountSettings-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::AccountApi;
@@ -1773,15 +1217,15 @@ use WWW::SwaggerClient::AccountApi;
 my $api_instance = WWW::SwaggerClient::AccountApi->new();
 
 eval { 
-    my $result = $api_instance->getUser();
+    my $result = $api_instance->getAccountSettings();
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling AccountApi->getUser: $@\n";
+    warn "Exception when calling AccountApi->getAccountSettings: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Account-getUser-0-python">
+                            <div class="tab-pane" id="examples-Account-getAccountSettings-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -1793,10 +1237,11 @@ from pprint import pprint
 api_instance = swagger_client.AccountApi()
 
 try: 
-    api_response = api_instance.get_user()
+    # Get current account information and settings.
+    api_response = api_instance.get_account_settings()
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling AccountApi->getUser: %s\n" % e)</code></pre>
+    print("Exception when calling AccountApi->getAccountSettings: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -1808,22 +1253,2175 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Return the currently logged-in user&#x27;s account information. </h3>
+                            <h3> Status: 200 - Get current account information and settings. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-getUser-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-getAccountSettings-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-getUser-200-schema">
-                                  <div id='responses-getUser-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-getAccountSettings-200-schema">
+                                  <div id='responses-getAccountSettings-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Get current account information and settings.",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/User"
+      }
+    }
+  },
+  "x-last-modified" : 1625106621162
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getAccountSettings-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getAccountSettings-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getAccountSettings-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Account-patchAccountSettings">
+                      <article id="api-Account-patchAccountSettings-0" data-group="User" data-name="patchAccountSettings" data-version="0">
+                        <div class="pull-left">
+                          <h1>patchAccountSettings</h1>
+                          <p>Edit the current account&#x27;s settings.</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="patch"><code><span class="pln">/account/settings/</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Account-patchAccountSettings-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Account-patchAccountSettings-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Account-patchAccountSettings-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Account-patchAccountSettings-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Account-patchAccountSettings-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Account-patchAccountSettings-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Account-patchAccountSettings-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Account-patchAccountSettings-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Account-patchAccountSettings-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Account-patchAccountSettings-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Account-patchAccountSettings-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Account-patchAccountSettings-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
+ -H "Authorization: Bearer [[accessToken]]"\
+-H "Accept: application/json"\
+-H "Content-Type: application/json"\
+"https://hospitalityplatform.herokuapp.com/api/account/settings/"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Account-patchAccountSettings-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.AccountApi;
+
+import java.io.File;
+import java.util.*;
+
+public class AccountApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+
+        AccountApi apiInstance = new AccountApi();
+        EditUser body = ; // EditUser | Edit the current account's settings.
+        try {
+            User result = apiInstance.patchAccountSettings(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountApi#patchAccountSettings");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Account-patchAccountSettings-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.AccountApi;
+
+public class AccountApiExample {
+
+    public static void main(String[] args) {
+        AccountApi apiInstance = new AccountApi();
+        EditUser body = ; // EditUser | Edit the current account's settings.
+        try {
+            User result = apiInstance.patchAccountSettings(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountApi#patchAccountSettings");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Account-patchAccountSettings-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Account-patchAccountSettings-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+EditUser *body = ; // Edit the current account's settings. (optional)
+
+AccountApi *apiInstance = [[AccountApi alloc] init];
+
+// Edit the current account's settings.
+[apiInstance patchAccountSettingsWith:body
+              completionHandler: ^(User output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Account-patchAccountSettings-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
+var defaultClient = HospitalityPlatformApi.ApiClient.instance;
+
+
+var api = new HospitalityPlatformApi.AccountApi()
+var opts = { 
+  'body':  // {{EditUser}} Edit the current account's settings.
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.patchAccountSettings(opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Account-patchAccountSettings-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Account-patchAccountSettings-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class patchAccountSettingsExample
+    {
+        public void main()
+        {
+
+
+            var apiInstance = new AccountApi();
+            var body = new EditUser(); // EditUser | Edit the current account's settings. (optional) 
+
+            try
+            {
+                // Edit the current account's settings.
+                User result = apiInstance.patchAccountSettings(body);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling AccountApi.patchAccountSettings: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Account-patchAccountSettings-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+$api_instance = new Swagger\Client\ApiAccountApi();
+$body = ; // EditUser | Edit the current account's settings.
+
+try {
+    $result = $api_instance->patchAccountSettings($body);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling AccountApi->patchAccountSettings: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Account-patchAccountSettings-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::AccountApi;
+
+
+my $api_instance = WWW::SwaggerClient::AccountApi->new();
+my $body = WWW::SwaggerClient::Object::EditUser->new(); # EditUser | Edit the current account's settings.
+
+eval { 
+    my $result = $api_instance->patchAccountSettings(body => $body);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling AccountApi->patchAccountSettings: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Account-patchAccountSettings-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+
+# create an instance of the API class
+api_instance = swagger_client.AccountApi()
+body =  # EditUser | Edit the current account's settings. (optional)
+
+try: 
+    # Edit the current account's settings.
+    api_response = api_instance.patch_account_settings(body=body)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling AccountApi->patchAccountSettings: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body </td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "description" : "Edit the current account's settings.",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/EditUser"
+      }
+    }
+  },
+  "required" : false
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_patchAccountSettings_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_patchAccountSettings_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Edit the current account&#x27;s settings. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-patchAccountSettings-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-patchAccountSettings-200-schema">
+                                  <div id='responses-patchAccountSettings-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Edit the current account's settings.",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/User"
+      }
+    }
+  },
+  "x-last-modified" : 1625107207680
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-patchAccountSettings-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-patchAccountSettings-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-patchAccountSettings-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Account-postAccountLogin">
+                      <article id="api-Account-postAccountLogin-0" data-group="User" data-name="postAccountLogin" data-version="0">
+                        <div class="pull-left">
+                          <h1>postAccountLogin</h1>
+                          <p>Create a session.</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Given a username and password, returns a JWT for the session.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/account/login/</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Account-postAccountLogin-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Account-postAccountLogin-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Account-postAccountLogin-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Account-postAccountLogin-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Account-postAccountLogin-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Account-postAccountLogin-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Account-postAccountLogin-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Account-postAccountLogin-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Account-postAccountLogin-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Account-postAccountLogin-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Account-postAccountLogin-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Account-postAccountLogin-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+ -H "Authorization: Bearer [[accessToken]]"\
+-H "Accept: application/json"\
+-H "Content-Type: application/json"\
+"https://hospitalityplatform.herokuapp.com/api/account/login/"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Account-postAccountLogin-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.AccountApi;
+
+import java.io.File;
+import java.util.*;
+
+public class AccountApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+
+        AccountApi apiInstance = new AccountApi();
+        Credentials body = ; // Credentials | Account credentials
+        try {
+            NewJWT result = apiInstance.postAccountLogin(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountApi#postAccountLogin");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Account-postAccountLogin-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.AccountApi;
+
+public class AccountApiExample {
+
+    public static void main(String[] args) {
+        AccountApi apiInstance = new AccountApi();
+        Credentials body = ; // Credentials | Account credentials
+        try {
+            NewJWT result = apiInstance.postAccountLogin(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountApi#postAccountLogin");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Account-postAccountLogin-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Account-postAccountLogin-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+Credentials *body = ; // Account credentials
+
+AccountApi *apiInstance = [[AccountApi alloc] init];
+
+// Create a session.
+[apiInstance postAccountLoginWith:body
+              completionHandler: ^(NewJWT output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Account-postAccountLogin-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
+var defaultClient = HospitalityPlatformApi.ApiClient.instance;
+
+
+var api = new HospitalityPlatformApi.AccountApi()
+var body = ; // {{Credentials}} Account credentials
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.postAccountLogin(body, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Account-postAccountLogin-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Account-postAccountLogin-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class postAccountLoginExample
+    {
+        public void main()
+        {
+
+
+            var apiInstance = new AccountApi();
+            var body = new Credentials(); // Credentials | Account credentials
+
+            try
+            {
+                // Create a session.
+                NewJWT result = apiInstance.postAccountLogin(body);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling AccountApi.postAccountLogin: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Account-postAccountLogin-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+$api_instance = new Swagger\Client\ApiAccountApi();
+$body = ; // Credentials | Account credentials
+
+try {
+    $result = $api_instance->postAccountLogin($body);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling AccountApi->postAccountLogin: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Account-postAccountLogin-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::AccountApi;
+
+
+my $api_instance = WWW::SwaggerClient::AccountApi->new();
+my $body = WWW::SwaggerClient::Object::Credentials->new(); # Credentials | Account credentials
+
+eval { 
+    my $result = $api_instance->postAccountLogin(body => $body);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling AccountApi->postAccountLogin: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Account-postAccountLogin-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+
+# create an instance of the API class
+api_instance = swagger_client.AccountApi()
+body =  # Credentials | Account credentials
+
+try: 
+    # Create a session.
+    api_response = api_instance.post_account_login(body)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling AccountApi->postAccountLogin: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "description" : "Account credentials",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Credentials"
+      }
+    }
+  },
+  "required" : true
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_postAccountLogin_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_postAccountLogin_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Return the currently logged-in user&#x27;s account information. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-postAccountLogin-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-postAccountLogin-200-schema">
+                                  <div id='responses-postAccountLogin-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
   "description" : "Return the currently logged-in user's account information.",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/NewJWT"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-postAccountLogin-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-postAccountLogin-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-postAccountLogin-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                  </section>
+                <section id="api-Admin">
+                  <h1>Admin</h1>
+                    <div id="api-Admin-getAccountAll">
+                      <article id="api-Admin-getAccountAll-0" data-group="User" data-name="getAccountAll" data-version="0">
+                        <div class="pull-left">
+                          <h1>getAccountAll</h1>
+                          <p>List all accounts.</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/account/all/</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Admin-getAccountAll-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Admin-getAccountAll-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Admin-getAccountAll-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Admin-getAccountAll-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Admin-getAccountAll-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Admin-getAccountAll-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Admin-getAccountAll-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Admin-getAccountAll-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Admin-getAccountAll-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Admin-getAccountAll-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Admin-getAccountAll-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Admin-getAccountAll-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+ -H "Authorization: Bearer [[accessToken]]"\
+-H "Accept: application/json"\
+"https://hospitalityplatform.herokuapp.com/api/account/all/"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Admin-getAccountAll-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.AdminApi;
+
+import java.io.File;
+import java.util.*;
+
+public class AdminApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+
+        AdminApi apiInstance = new AdminApi();
+        try {
+            array[User] result = apiInstance.getAccountAll();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AdminApi#getAccountAll");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Admin-getAccountAll-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.AdminApi;
+
+public class AdminApiExample {
+
+    public static void main(String[] args) {
+        AdminApi apiInstance = new AdminApi();
+        try {
+            array[User] result = apiInstance.getAccountAll();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AdminApi#getAccountAll");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Admin-getAccountAll-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Admin-getAccountAll-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+AdminApi *apiInstance = [[AdminApi alloc] init];
+
+// List all accounts.
+[apiInstance getAccountAllWithCompletionHandler: 
+              ^(array[User] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-getAccountAll-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
+var defaultClient = HospitalityPlatformApi.ApiClient.instance;
+
+
+var api = new HospitalityPlatformApi.AdminApi()
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.getAccountAll(callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Admin-getAccountAll-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Admin-getAccountAll-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class getAccountAllExample
+    {
+        public void main()
+        {
+
+
+            var apiInstance = new AdminApi();
+
+            try
+            {
+                // List all accounts.
+                array[User] result = apiInstance.getAccountAll();
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling AdminApi.getAccountAll: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-getAccountAll-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+$api_instance = new Swagger\Client\ApiAdminApi();
+
+try {
+    $result = $api_instance->getAccountAll();
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling AdminApi->getAccountAll: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-getAccountAll-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::AdminApi;
+
+
+my $api_instance = WWW::SwaggerClient::AdminApi->new();
+
+eval { 
+    my $result = $api_instance->getAccountAll();
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling AdminApi->getAccountAll: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-getAccountAll-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+
+# create an instance of the API class
+api_instance = swagger_client.AdminApi()
+
+try: 
+    # List all accounts.
+    api_response = api_instance.get_account_all()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling AdminApi->getAccountAll: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - List all accounts. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getAccountAll-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getAccountAll-200-schema">
+                                  <div id='responses-getAccountAll-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "List all accounts.",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/User"
+        },
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getAccountAll-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getAccountAll-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getAccountAll-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Admin-getHotel">
+                      <article id="api-Admin-getHotel-0" data-group="User" data-name="getHotel" data-version="0">
+                        <div class="pull-left">
+                          <h1>getHotel</h1>
+                          <p>Get the hotel&#x27;s metadata.</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/hotel/</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Admin-getHotel-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Admin-getHotel-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Admin-getHotel-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Admin-getHotel-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Admin-getHotel-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Admin-getHotel-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Admin-getHotel-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Admin-getHotel-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Admin-getHotel-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Admin-getHotel-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Admin-getHotel-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Admin-getHotel-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+ -H "Authorization: Bearer [[accessToken]]"\
+-H "Accept: application/json"\
+"https://hospitalityplatform.herokuapp.com/api/hotel/"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Admin-getHotel-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.AdminApi;
+
+import java.io.File;
+import java.util.*;
+
+public class AdminApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+
+        AdminApi apiInstance = new AdminApi();
+        try {
+            Hotel result = apiInstance.getHotel();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AdminApi#getHotel");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Admin-getHotel-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.AdminApi;
+
+public class AdminApiExample {
+
+    public static void main(String[] args) {
+        AdminApi apiInstance = new AdminApi();
+        try {
+            Hotel result = apiInstance.getHotel();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AdminApi#getHotel");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Admin-getHotel-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Admin-getHotel-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+AdminApi *apiInstance = [[AdminApi alloc] init];
+
+// Get the hotel's metadata.
+[apiInstance getHotelWithCompletionHandler: 
+              ^(Hotel output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-getHotel-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
+var defaultClient = HospitalityPlatformApi.ApiClient.instance;
+
+
+var api = new HospitalityPlatformApi.AdminApi()
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.getHotel(callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Admin-getHotel-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Admin-getHotel-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class getHotelExample
+    {
+        public void main()
+        {
+
+
+            var apiInstance = new AdminApi();
+
+            try
+            {
+                // Get the hotel's metadata.
+                Hotel result = apiInstance.getHotel();
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling AdminApi.getHotel: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-getHotel-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+$api_instance = new Swagger\Client\ApiAdminApi();
+
+try {
+    $result = $api_instance->getHotel();
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling AdminApi->getHotel: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-getHotel-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::AdminApi;
+
+
+my $api_instance = WWW::SwaggerClient::AdminApi->new();
+
+eval { 
+    my $result = $api_instance->getHotel();
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling AdminApi->getHotel: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-getHotel-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+
+# create an instance of the API class
+api_instance = swagger_client.AdminApi()
+
+try: 
+    # Get the hotel's metadata.
+    api_response = api_instance.get_hotel()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling AdminApi->getHotel: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Returns the hotel&#x27;s metadata. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getHotel-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getHotel-200-schema">
+                                  <div id='responses-getHotel-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Returns the hotel's metadata.",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Hotel"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getHotel-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getHotel-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getHotel-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Admin-patchAccountRoles">
+                      <article id="api-Admin-patchAccountRoles-0" data-group="User" data-name="patchAccountRoles" data-version="0">
+                        <div class="pull-left">
+                          <h1>patchAccountRoles</h1>
+                          <p>Set the role of a user.</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="patch"><code><span class="pln">/account/roles/</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Admin-patchAccountRoles-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Admin-patchAccountRoles-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Admin-patchAccountRoles-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Admin-patchAccountRoles-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Admin-patchAccountRoles-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Admin-patchAccountRoles-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Admin-patchAccountRoles-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Admin-patchAccountRoles-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Admin-patchAccountRoles-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Admin-patchAccountRoles-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Admin-patchAccountRoles-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Admin-patchAccountRoles-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
+ -H "Authorization: Bearer [[accessToken]]"\
+-H "Accept: application/json"\
+-H "Content-Type: application/json"\
+"https://hospitalityplatform.herokuapp.com/api/account/roles/"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Admin-patchAccountRoles-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.AdminApi;
+
+import java.io.File;
+import java.util.*;
+
+public class AdminApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+
+        AdminApi apiInstance = new AdminApi();
+        Role body = ; // Role | 
+        try {
+            Role result = apiInstance.patchAccountRoles(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AdminApi#patchAccountRoles");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Admin-patchAccountRoles-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.AdminApi;
+
+public class AdminApiExample {
+
+    public static void main(String[] args) {
+        AdminApi apiInstance = new AdminApi();
+        Role body = ; // Role | 
+        try {
+            Role result = apiInstance.patchAccountRoles(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AdminApi#patchAccountRoles");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Admin-patchAccountRoles-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Admin-patchAccountRoles-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+Role *body = ; // 
+
+AdminApi *apiInstance = [[AdminApi alloc] init];
+
+// Set the role of a user.
+[apiInstance patchAccountRolesWith:body
+              completionHandler: ^(Role output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-patchAccountRoles-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
+var defaultClient = HospitalityPlatformApi.ApiClient.instance;
+
+
+var api = new HospitalityPlatformApi.AdminApi()
+var body = ; // {{Role}} 
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.patchAccountRoles(body, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Admin-patchAccountRoles-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Admin-patchAccountRoles-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class patchAccountRolesExample
+    {
+        public void main()
+        {
+
+
+            var apiInstance = new AdminApi();
+            var body = new Role(); // Role | 
+
+            try
+            {
+                // Set the role of a user.
+                Role result = apiInstance.patchAccountRoles(body);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling AdminApi.patchAccountRoles: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-patchAccountRoles-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+$api_instance = new Swagger\Client\ApiAdminApi();
+$body = ; // Role | 
+
+try {
+    $result = $api_instance->patchAccountRoles($body);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling AdminApi->patchAccountRoles: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-patchAccountRoles-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::AdminApi;
+
+
+my $api_instance = WWW::SwaggerClient::AdminApi->new();
+my $body = WWW::SwaggerClient::Object::Role->new(); # Role | 
+
+eval { 
+    my $result = $api_instance->patchAccountRoles(body => $body);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling AdminApi->patchAccountRoles: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-patchAccountRoles-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+
+# create an instance of the API class
+api_instance = swagger_client.AdminApi()
+body =  # Role | 
+
+try: 
+    # Set the role of a user.
+    api_response = api_instance.patch_account_roles(body)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling AdminApi->patchAccountRoles: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Role"
+      }
+    }
+  },
+  "required" : true
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_patchAccountRoles_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_patchAccountRoles_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Set the role of a user. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-patchAccountRoles-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-patchAccountRoles-200-schema">
+                                  <div id='responses-patchAccountRoles-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Set the role of a user.",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Role"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-patchAccountRoles-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-patchAccountRoles-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-patchAccountRoles-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Admin-patchHotel">
+                      <article id="api-Admin-patchHotel-0" data-group="User" data-name="patchHotel" data-version="0">
+                        <div class="pull-left">
+                          <h1>patchHotel</h1>
+                          <p>Edit the instance&#x27;s metadata.</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="patch"><code><span class="pln">/hotel/</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Admin-patchHotel-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Admin-patchHotel-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Admin-patchHotel-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Admin-patchHotel-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Admin-patchHotel-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Admin-patchHotel-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Admin-patchHotel-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Admin-patchHotel-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Admin-patchHotel-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Admin-patchHotel-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Admin-patchHotel-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Admin-patchHotel-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
+ -H "Authorization: Bearer [[accessToken]]"\
+-H "Accept: application/json"\
+-H "Content-Type: application/json"\
+"https://hospitalityplatform.herokuapp.com/api/hotel/"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Admin-patchHotel-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.AdminApi;
+
+import java.io.File;
+import java.util.*;
+
+public class AdminApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+
+        AdminApi apiInstance = new AdminApi();
+        Hotel body = ; // Hotel | 
+        try {
+            Hotel result = apiInstance.patchHotel(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AdminApi#patchHotel");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Admin-patchHotel-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.AdminApi;
+
+public class AdminApiExample {
+
+    public static void main(String[] args) {
+        AdminApi apiInstance = new AdminApi();
+        Hotel body = ; // Hotel | 
+        try {
+            Hotel result = apiInstance.patchHotel(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AdminApi#patchHotel");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Admin-patchHotel-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Admin-patchHotel-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+Hotel *body = ; // 
+
+AdminApi *apiInstance = [[AdminApi alloc] init];
+
+// Edit the instance's metadata.
+[apiInstance patchHotelWith:body
+              completionHandler: ^(Hotel output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-patchHotel-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
+var defaultClient = HospitalityPlatformApi.ApiClient.instance;
+
+
+var api = new HospitalityPlatformApi.AdminApi()
+var body = ; // {{Hotel}} 
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.patchHotel(body, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Admin-patchHotel-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Admin-patchHotel-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class patchHotelExample
+    {
+        public void main()
+        {
+
+
+            var apiInstance = new AdminApi();
+            var body = new Hotel(); // Hotel | 
+
+            try
+            {
+                // Edit the instance's metadata.
+                Hotel result = apiInstance.patchHotel(body);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling AdminApi.patchHotel: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-patchHotel-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+$api_instance = new Swagger\Client\ApiAdminApi();
+$body = ; // Hotel | 
+
+try {
+    $result = $api_instance->patchHotel($body);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling AdminApi->patchHotel: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-patchHotel-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::AdminApi;
+
+
+my $api_instance = WWW::SwaggerClient::AdminApi->new();
+my $body = WWW::SwaggerClient::Object::Hotel->new(); # Hotel | 
+
+eval { 
+    my $result = $api_instance->patchHotel(body => $body);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling AdminApi->patchHotel: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-patchHotel-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+
+# create an instance of the API class
+api_instance = swagger_client.AdminApi()
+body =  # Hotel | 
+
+try: 
+    # Edit the instance's metadata.
+    api_response = api_instance.patch_hotel(body)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling AdminApi->patchHotel: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Hotel"
+      }
+    }
+  },
+  "required" : true
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_patchHotel_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_patchHotel_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Returns the hotel&#x27;s metadata. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-patchHotel-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-patchHotel-200-schema">
+                                  <div id='responses-patchHotel-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Returns the hotel's metadata.",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Hotel"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-patchHotel-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-patchHotel-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-patchHotel-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Admin-postAccountCreate">
+                      <article id="api-Admin-postAccountCreate-0" data-group="User" data-name="postAccountCreate" data-version="0">
+                        <div class="pull-left">
+                          <h1>postAccountCreate</h1>
+                          <p>Provision a new user.</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/account/create/</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Admin-postAccountCreate-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Admin-postAccountCreate-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Admin-postAccountCreate-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Admin-postAccountCreate-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Admin-postAccountCreate-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Admin-postAccountCreate-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Admin-postAccountCreate-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Admin-postAccountCreate-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Admin-postAccountCreate-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Admin-postAccountCreate-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Admin-postAccountCreate-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Admin-postAccountCreate-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+ -H "Authorization: Bearer [[accessToken]]"\
+-H "Accept: application/json"\
+-H "Content-Type: application/json"\
+"https://hospitalityplatform.herokuapp.com/api/account/create/"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Admin-postAccountCreate-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.AdminApi;
+
+import java.io.File;
+import java.util.*;
+
+public class AdminApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+
+        AdminApi apiInstance = new AdminApi();
+        UserStub body = ; // UserStub | 
+        try {
+            User result = apiInstance.postAccountCreate(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AdminApi#postAccountCreate");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Admin-postAccountCreate-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.AdminApi;
+
+public class AdminApiExample {
+
+    public static void main(String[] args) {
+        AdminApi apiInstance = new AdminApi();
+        UserStub body = ; // UserStub | 
+        try {
+            User result = apiInstance.postAccountCreate(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AdminApi#postAccountCreate");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Admin-postAccountCreate-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Admin-postAccountCreate-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+UserStub *body = ; // 
+
+AdminApi *apiInstance = [[AdminApi alloc] init];
+
+// Provision a new user.
+[apiInstance postAccountCreateWith:body
+              completionHandler: ^(User output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-postAccountCreate-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
+var defaultClient = HospitalityPlatformApi.ApiClient.instance;
+
+
+var api = new HospitalityPlatformApi.AdminApi()
+var body = ; // {{UserStub}} 
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.postAccountCreate(body, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Admin-postAccountCreate-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Admin-postAccountCreate-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class postAccountCreateExample
+    {
+        public void main()
+        {
+
+
+            var apiInstance = new AdminApi();
+            var body = new UserStub(); // UserStub | 
+
+            try
+            {
+                // Provision a new user.
+                User result = apiInstance.postAccountCreate(body);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling AdminApi.postAccountCreate: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-postAccountCreate-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+$api_instance = new Swagger\Client\ApiAdminApi();
+$body = ; // UserStub | 
+
+try {
+    $result = $api_instance->postAccountCreate($body);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling AdminApi->postAccountCreate: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-postAccountCreate-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::AdminApi;
+
+
+my $api_instance = WWW::SwaggerClient::AdminApi->new();
+my $body = WWW::SwaggerClient::Object::UserStub->new(); # UserStub | 
+
+eval { 
+    my $result = $api_instance->postAccountCreate(body => $body);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling AdminApi->postAccountCreate: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-postAccountCreate-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+
+# create an instance of the API class
+api_instance = swagger_client.AdminApi()
+body =  # UserStub | 
+
+try: 
+    # Provision a new user.
+    api_response = api_instance.post_account_create(body)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling AdminApi->postAccountCreate: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/UserStub"
+      }
+    }
+  },
+  "required" : true
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_postAccountCreate_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_postAccountCreate_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Provision a new user. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-postAccountCreate-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-postAccountCreate-200-schema">
+                                  <div id='responses-postAccountCreate-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Provision a new user.",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -1845,37 +3443,310 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-getUser-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-getUser-200-schema-200');
+                                        $('#responses-postAccountCreate-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-postAccountCreate-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-getUser-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-postAccountCreate-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
-                            <h3> Status: 401 - The user is not logged in. </h3>
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Admin-postAccountRoles">
+                      <article id="api-Admin-postAccountRoles-0" data-group="User" data-name="postAccountRoles" data-version="0">
+                        <div class="pull-left">
+                          <h1>postAccountRoles</h1>
+                          <p>Get the role of a user, given just a username.</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/account/roles/</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Admin-postAccountRoles-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Admin-postAccountRoles-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Admin-postAccountRoles-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Admin-postAccountRoles-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Admin-postAccountRoles-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Admin-postAccountRoles-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Admin-postAccountRoles-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Admin-postAccountRoles-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Admin-postAccountRoles-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Admin-postAccountRoles-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Admin-postAccountRoles-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Admin-postAccountRoles-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+ -H "Authorization: Bearer [[accessToken]]"\
+-H "Accept: application/json"\
+-H "Content-Type: application/json"\
+"https://hospitalityplatform.herokuapp.com/api/account/roles/"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Admin-postAccountRoles-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.AdminApi;
+
+import java.io.File;
+import java.util.*;
+
+public class AdminApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+
+        AdminApi apiInstance = new AdminApi();
+        Role body = ; // Role | 
+        try {
+            Role result = apiInstance.postAccountRoles(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AdminApi#postAccountRoles");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Admin-postAccountRoles-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.AdminApi;
+
+public class AdminApiExample {
+
+    public static void main(String[] args) {
+        AdminApi apiInstance = new AdminApi();
+        Role body = ; // Role | 
+        try {
+            Role result = apiInstance.postAccountRoles(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AdminApi#postAccountRoles");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Admin-postAccountRoles-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Admin-postAccountRoles-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+Role *body = ; // 
+
+AdminApi *apiInstance = [[AdminApi alloc] init];
+
+// Get the role of a user, given just a username.
+[apiInstance postAccountRolesWith:body
+              completionHandler: ^(Role output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-postAccountRoles-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var HospitalityPlatformApi = require('hospitality_platform_api');
+var defaultClient = HospitalityPlatformApi.ApiClient.instance;
+
+
+var api = new HospitalityPlatformApi.AdminApi()
+var body = ; // {{Role}} 
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.postAccountRoles(body, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Admin-postAccountRoles-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Admin-postAccountRoles-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class postAccountRolesExample
+    {
+        public void main()
+        {
+
+
+            var apiInstance = new AdminApi();
+            var body = new Role(); // Role | 
+
+            try
+            {
+                // Get the role of a user, given just a username.
+                Role result = apiInstance.postAccountRoles(body);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling AdminApi.postAccountRoles: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-postAccountRoles-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+$api_instance = new Swagger\Client\ApiAdminApi();
+$body = ; // Role | 
+
+try {
+    $result = $api_instance->postAccountRoles($body);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling AdminApi->postAccountRoles: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-postAccountRoles-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::AdminApi;
+
+
+my $api_instance = WWW::SwaggerClient::AdminApi->new();
+my $body = WWW::SwaggerClient::Object::Role->new(); # Role | 
+
+eval { 
+    my $result = $api_instance->postAccountRoles(body => $body);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling AdminApi->postAccountRoles: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Admin-postAccountRoles-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+
+# create an instance of the API class
+api_instance = swagger_client.AdminApi()
+body =  # Role | 
+
+try: 
+    # Get the role of a user, given just a username.
+    api_response = api_instance.post_account_roles(body)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling AdminApi->postAccountRoles: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Role"
+      }
+    }
+  },
+  "required" : true
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_postAccountRoles_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_postAccountRoles_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Get the role of a user. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-getUser-401-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-postAccountRoles-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-getUser-401-schema">
-                                  <div id='responses-getUser-401-schema-401' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-postAccountRoles-200-schema">
+                                  <div id='responses-postAccountRoles-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "The user is not logged in.",
+  "description" : "Get the role of a user.",
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/Error401"
+        "$ref" : "#/components/schemas/Role"
       }
     }
   }
@@ -1893,14 +3764,14 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-getUser-401-schema-data').val(stringify(schema));
-                                        var result = $('#responses-getUser-401-schema-401');
+                                        $('#responses-postAccountRoles-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-postAccountRoles-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-getUser-401-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-postAccountRoles-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 

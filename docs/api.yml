@@ -11,7 +11,7 @@ info:
   x-logo:
     url: ''
 servers:
-  - url: https://hospitalityplatform.herokuapp.com/api/
+  - url: https://hospitalityplatform.herokuapp.com/api
     description: Production
   - url: https://virtserver.swaggerhub.com/jeffreydivi/HospitalityPlatform/1.0.0
     description: SwaggerHub API Auto Mocking
@@ -73,6 +73,21 @@ paths:
           description: Return the currently logged-in user's account information.
       operationId: post_account_login
       description: Given a username and password, returns a JWT for the session.
+  /account/all/:
+    get:
+      tags:
+        - Admin
+      operationId: get_account_all
+      summary: List all accounts.
+      responses:
+        '200':
+          description: List all accounts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
   /account/roles/:
     summary: View and manage an account's role (guest/staff/admin).
     post:
@@ -115,6 +130,56 @@ paths:
           description: 'Set the role of a user.'
           headers: {}
           links: {}
+  /account/create/:
+    post:
+      tags:
+        - Admin
+      operationId: post_account_create
+      summary: Provision a new user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserStub'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Provision a new user.
+  /hotel/:
+    get:
+      summary: Get the hotel's metadata.
+      tags:
+        - Admin
+      operationId: get_hotel
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hotel'
+          description: Returns the hotel's metadata.
+    patch:
+      tags:
+        - Admin
+      operationId: patch_hotel
+      summary: Edit the instance's metadata.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Hotel'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hotel'
+          description: Returns the hotel's metadata.
 components:
   schemas:
     Error404:
@@ -223,6 +288,26 @@ components:
           description: A given user's role.
           type: string
           example: admin
+    UserStub:
+      description: A bare-minimum user for account creation.
+      type: object
+      properties:
+        username:
+          description: The user's username
+          type: string
+          example: jdivincent
+        first_name:
+          description: The user's first name
+          type: string
+          example: Jeffrey
+        email:
+          description: The user's email.
+          type: string
+          example: divi@example.com
+        phone:
+          description: The user's phone number, stored as an integer.
+          type: integer
+          example: 4078242000
     EditUser:
       description: The user-editable sections of a user entry.
       type: object
@@ -284,6 +369,59 @@ components:
               example: 345P
 
         - $ref: '#/components/schemas/EditUser'
+    Hotel:
+      required:
+        - name
+        - bkgd
+        - desc
+        - terms
+      type: object
+      properties:
+        name:
+          description: The name of the hotel.
+          type: string
+          example: Disney's Hyperion Resort
+        bkgd:
+          description: A URL to an image.
+          type: string
+          example: https://i.divi.sh/bkgd.png
+        desc:
+          description: A long-form description of the hotel, in Markdown.
+          type: string
+          example: '# Hello, world!'
+        terms:
+          description: A summarized form of the hotel's rules.
+          type: array
+          items:
+            $ref: '#/components/schemas/Terms'
+          example:
+            - name: Don't break the law.
+              icon: fab fa-twitter
+              desc: Breaking the law is illegal. **So don't do it!**
+              url: https://o.divi.sh/terms/
+    Terms:
+      required:
+        - name
+        - desc
+      type: object
+      properties:
+        name:
+          type: string
+          description: A description of the term.
+          example: Don't break the law.
+        icon:
+          type: string
+          description: A Font Awesome string to render the icon with.
+          example: fab fa-twitter
+        desc:
+          type: string
+          description: A long-form description of the term, in Markdown.
+          example: Breaking the law is illegal. **So don't do it!**
+        url:
+          type: string
+          description: A URL to the un-summarized term, likely written by real lawyers.
+          example: https://o.divi.sh/terms/
+
   securitySchemes:
     Bearer:
       scheme: bearer
