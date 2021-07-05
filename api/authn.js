@@ -14,3 +14,15 @@ module.exports.isAuthorized  = (req, res, next) => {
         return next();
     });
 }
+
+module.exports.isAdmin = (req, res, next) => {
+    if (!req.user) return res.status(500).json(errGen(500, "Middleware call in wrong order."));
+    if (req.user.role !== "admin") return res.status(403).json(errGen(403, "Endpoint restricted to Admin."));
+    return next();
+}
+
+module.exports.isStaff = (req, res, next) => {
+    if (!req.user) return res.status(500).json(errGen(500, "Middleware call in wrong order."));
+    if (req.user.role === "staff" || req.user.role === "admin") return next();
+    return res.status(403).json(errGen(403, "Endpoint restricted to Staff."));
+}

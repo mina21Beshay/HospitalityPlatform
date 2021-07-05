@@ -29,10 +29,9 @@ app.post("/api/account/login", async (req, res, next) => {
         });
     }
     else
-        res.status(403).send("Invalid Credentials.");
+        return res.status(401).json(errGen(401));
 })
 
-// Permissions level: GUEST
 app.get("/api/inventory", authn.isAuthorized, async (req, res, next) => {
     const db = db_client.db();
     const results = await
@@ -51,10 +50,9 @@ app.get("/api/inventory", authn.isAuthorized, async (req, res, next) => {
     return res.status(200).json(formatted);
 })
 
-// Permissions level: ADMIN
-app.post("/api/inventory", authn.isAuthorized, async (req, res, next) => {
-    // Guard: require admin.
-    if (req.user.role !== "admin") return res.status(403).json(errGen(403));
+app.post("/api/inventory", [authn.isAuthorized, authn.isAdmin], async (req, res, next) => {
+    // Admin guard: authn.isAdmin. Requires isAuthorized to be called FIRST; Order matters a lot here!
+    // Can be replaced with isStaff to check if an endpoint is available for staff and admin (not guest).
 
     let {name, description, img, quantity} = req.body;
     if (!name) return res.status(403).json(errGen(403, 'Missing "name" field in request.'));
@@ -81,8 +79,29 @@ app.post("/api/inventory", authn.isAuthorized, async (req, res, next) => {
             "img": results.IMG,
             "quantity": results.Quantity
         });
+    }).catch((err) => {
+        return res.status(500).json(errGen(500, err));
     });
 })
+
+app.delete("/api/inventory/:inventory_id", [authn.isAuthorized, authn.isAdmin], async (req, res, next) => {
+    let inventory_id = req.params.inventory_id;
+    try {
+        inventory_id = Number(inventory_id);
+        if (isNaN(inventory_id))
+            return res.status(400).json(errGen(400, "Invalid item ID."));
+    } catch(err) {
+        // If we can't cast a number
+        return res.status(400, "Invalid item ID.");
+    }
+    db_client.db().collection('Inventory').deleteOne({Item_ID: inventory_id}).then((out) => {
+        if (out.deletedCount === 0)
+            return res.status(200).json(errGen(200, "No items deleted."));
+        return res.status(200).json(errGen(200, "Item successfully deleted."));
+    }).catch((err) => {
+        return res.status(500).json(errGen(500, err));
+    });
+});
 
 // bcrypt hash password function for POST/api/createAcc
 // const hashPassword = async (password, saltRounds = 10) => {
