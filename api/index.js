@@ -10,7 +10,6 @@ app.listen(port);
 const async = require("async");
 //const bcrypt = require("bcrypt")
 const dotenv = require("dotenv")
-
 dotenv.config()
 
 // Note: make sure you authenticate correctly!
@@ -47,19 +46,21 @@ app.all("/static/:file", (req, res) => {
 
 // Login endpoint
 app.post("/api/login", async (req, res, next) => {
-
     // grab login and password from request 
-    const {login, pw} = req.body
+    const {username, password} = req.body
     const db = db_client.db();
     const results = await 
-        db.collection('User').find({username:login, password:pw}).toArray()
+        db.collection('Accounts').find({Login:username, Password:password}).toArray()
     if (results.length > 0) {
-        var id = results[0].user_id
-        var fn = results[0].first_name
-        var ln = results[0].last_name
+        var id = results[0].UserID
+        var fn = results[0].FirstName
+        var ln = results[0].LastName
+        var ret = { user_id:id, first_name:fn, last_name:ln, error:''}
+        return res.status(200).json(ret)
     }
-    var ret = { user_id:id, first_name:fn, last_name:ln, error:''}
-    res.status(200).json(ret)
+    else
+        res.status(403).send("Invalid Credentials.")
+    
 })
 
 // bcrypt hash password function for POST/api/createAcc
