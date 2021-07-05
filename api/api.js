@@ -1,3 +1,6 @@
+const jwt = require('jsonwebtoken');
+const authn = require('./authn');
+
 exports.setApp = function (app, db_client) {
 
 // Login endpoint
@@ -17,11 +20,20 @@ app.post("/api/account/login", async (req, res, next) => {
         let fn = results[0].FirstName;
         let ln = results[0].LastName;
         let ret = { UserID:id, AccountType:acc, FirstName:fn, LastName:ln, error:''}
-        // Additionally, this endpoint is just supposed to return a JWT, not user data.
-        return res.status(200).json(ret);
+        // Actually, this endpoint should return a JWT, not information on the user. So let's generate that.
+        // And note how we are embedding in both the username and the role. This makes things a bit easier later on.
+        const token = jwt.sign({'username': username, 'role': acc}, process.env.JWT_SECRET, { expiresIn: '1h' });
+        return res.status(200).json({
+            // https://www.digitalocean.com/community/tutorials/nodejs-jwt-expressjs
+            "token": "Bearer " + token
+        });
     }
     else
         res.status(403).send("Invalid Credentials.");
+})
+
+app.get("/api/inventory", authn.isAuthorized, async (req, res, next) => {
+    res.status(200).json(errGen(200));
 })
 
 // bcrypt hash password function for POST/api/createAcc
