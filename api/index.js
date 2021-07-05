@@ -3,24 +3,34 @@ var express = require('express'),
     app = express(),
     port = process.env.PORT || 8080;
 var path = require('path');
-app.use(express.json())
+app.use(express.json());
 
 
 // const request = require("request");
 const async = require("async");
-//const bcrypt = require("bcrypt")
-const dotenv = require("dotenv")
-dotenv.config()
+// const bcrypt = require("bcrypt");
+const dotenv = require("dotenv");
+dotenv.config();
+
+if (!process.env.DB_USERNAME || !process.env.DB_PASSWORD) {
+    console.error("[ERROR] Environment variables are not set!");
+    console.debug(`[DEBUG] DB_USERNAME=${process.env.DB_USERNAME}`);
+    try {
+        console.debug(`[DEBUG] DB_PASSWORD=${(process.env.DB_PASSWORD).substring(0, 3)}**********`);
+    } catch(err) {
+        console.debug(`[DEBUG] DB_PASSWORD=(null)`);
+    }
+}
 
 // Note: make sure you authenticate correctly!
     const MongoClient = require('mongodb').MongoClient;
     const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.qaihg.mongodb.net/HotelManagement?retryWrites=true&w=majority`;
     const db_client = new MongoClient(uri, { useNewUrlParser: true });
-    db_client.connect()
- 
+    db_client.connect();
+
 console.log(`[HospitalityPlatform] Server running on port ${port}`);
 
-var api = require('./api.js');
+let api = require('./api.js');
 api.setApp( app, db_client );
 
 // Web server stuff.

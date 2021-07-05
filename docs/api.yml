@@ -89,48 +89,48 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-  /account/roles/:
-    summary: View and manage an account's role (guest/staff/admin).
-    post:
-      tags:
-        - Admin
-      operationId: post_account_roles
-      summary: Get the role of a user, given just a username.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Role'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Role'
-          description: 'Get the role of a user.'
-          headers: {}
-          links: {}
-    patch:
-      tags:
-        - Admin
-      operationId: patch_account_roles
-      summary: Set the role of a user.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Role'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Role'
-          description: 'Set the role of a user.'
-          headers: {}
-          links: {}
+#  /account/roles/:
+#    summary: View and manage an account's role (guest/staff/admin).
+#    post:
+#      tags:
+#        - Admin
+#      operationId: post_account_roles
+#      summary: Get the role of a user, given just a username.
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/Role'
+#      responses:
+#        '200':
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Role'
+#          description: 'Get the role of a user.'
+#          headers: {}
+#          links: {}
+#    patch:
+#      tags:
+#        - Admin
+#      operationId: patch_account_roles
+#      summary: Set the role of a user.
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/Role'
+#      responses:
+#        '200':
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Role'
+#          description: 'Set the role of a user.'
+#          headers: {}
+#          links: {}
   /account/create/:
     post:
       tags:
@@ -709,41 +709,41 @@ components:
           type: string
           example: https://i.divi.sh/bkgd.png
         desc:
-          description: A long-form description of the hotel, in Markdown.
+          description: A long-form description of the hotel.
           type: string
           example: '# Hello, world!'
-        terms:
-          description: A summarized form of the hotel's rules.
-          type: array
-          items:
-            $ref: '#/components/schemas/Terms'
-          example:
-            - name: Don't break the law.
-              icon: fab fa-twitter
-              desc: Breaking the law is illegal. **So don't do it!**
-              url: https://o.divi.sh/terms/
-    Terms:
-      required:
-        - name
-        - desc
-      type: object
-      properties:
-        name:
-          type: string
-          description: A description of the term.
-          example: Don't break the law.
-        icon:
-          type: string
-          description: A Font Awesome string to render the icon with.
-          example: fab fa-twitter
-        desc:
-          type: string
-          description: A long-form description of the term, in Markdown.
-          example: Breaking the law is illegal. **So don't do it!**
-        url:
-          type: string
-          description: A URL to the un-summarized term, likely written by real lawyers.
-          example: https://o.divi.sh/terms/
+#        terms:
+#          description: A summarized form of the hotel's rules.
+#          type: array
+#          items:
+#            $ref: '#/components/schemas/Terms'
+#          example:
+#            - name: Don't break the law.
+#              icon: fab fa-twitter
+#              desc: Breaking the law is illegal. **So don't do it!**
+#              url: https://o.divi.sh/terms/
+#    Terms:
+#      required:
+#        - name
+#        - desc
+#      type: object
+#      properties:
+#        name:
+#          type: string
+#          description: A description of the term.
+#          example: Don't break the law.
+#        icon:
+#          type: string
+#          description: A Font Awesome string to render the icon with.
+#          example: fab fa-twitter
+#        desc:
+#          type: string
+#          description: A long-form description of the term.
+#          example: Breaking the law is illegal. **So don't do it!**
+#        url:
+#          type: string
+#          description: A URL to the un-summarized term, likely written by real lawyers.
+#          example: https://o.divi.sh/terms/
     Room:
       required:
         - room_id
@@ -783,7 +783,7 @@ components:
           example: Extra Blankets
         description:
           type: string
-          description: A long-form description of the item, in Markdown.
+          description: A long-form description of the item.
           example: "*Need more blankets?* We'll get you some!"
         img:
           type: string
