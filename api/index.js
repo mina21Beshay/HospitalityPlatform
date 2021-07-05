@@ -35,15 +35,17 @@ if (process.env.JWT_SECRET && process.env.JWT_SECRET.length < 40) {
 
 console.log(`[HospitalityPlatform] Server running on port ${port}`);
 
-global.errGen = (errCode) => {
-    let desc = "Something bad happened.";
-    if (errCode == 400) desc = "Asset already exists.";
-    else if (errCode == 401) desc = "You are not logged in.";
-    else if (errCode == 403) desc = "You do not have permission to view this asset.";
-    else if (errCode == 404) desc = "Asset not found.";
-    else if (errCode >= 400 && errCode < 500) desc = "Malformed request.";
-    else if (errCode >= 500 && errCode < 600) desc = "The server is having some issues. Please report this!";
-    else if (errCode == 200) desc = "Success!";
+global.errGen = (errCode, desc) => {
+    if (!desc) {
+        let desc = "Something bad happened.";
+        if (errCode == 400) desc = "Asset already exists.";
+        else if (errCode == 401) desc = "You are not logged in.";
+        else if (errCode == 403) desc = "You do not have permission to view this asset.";
+        else if (errCode == 404) desc = "Asset not found.";
+        else if (errCode >= 400 && errCode < 500) desc = "Malformed request.";
+        else if (errCode >= 500 && errCode < 600) desc = "The server is having some issues. Please report this!";
+        else if (errCode == 200) desc = "Success!";
+    }
     return {
         "err_code": errCode,
         "description": desc
