@@ -35,6 +35,55 @@ if (process.env.JWT_SECRET && process.env.JWT_SECRET.length < 40) {
 
 console.log(`[HospitalityPlatform] Server running on port ${port}`);
 
+// DB schema -> API schema converters.
+global.accountGen = (dbObj) => {
+    return {
+        "user_id": dbObj.UserID,
+        "role": dbObj.AccountType.toLowerCase(),
+        "checkin": dbObj.CheckInDate,
+        "checkout": dbObj.checkoutDate,
+        "room": dbObj.RoomNumber,
+        "username": dbObj.Login,
+        "password": "**********",
+        "first_name": dbObj.FirstName,
+        "last_name": dbObj.LastName,
+        "email": dbObj.Email,
+        "phone": dbObj.PhoneNumber
+    }
+}
+global.inventoryGen = (dbObj) => {
+    return {
+        "item_id": dbObj.Item_ID,
+        "name": dbObj.Name,
+        "description": dbObj.Description,
+        "img": dbObj.IMG,
+        "quantity": dbObj.Quantity
+    }
+}
+global.orderGen = (dbObj) => {
+    return {
+        "order_id": dbObj.Order_ID,
+        "room_id": dbObj.Room_ID,
+        "staff": dbObj.Staff,
+        "item_id": dbObj.Item_ID,
+        "quantity": dbObj.Quantity,
+        "guest": dbObj.Guest
+    }
+}
+global.roomGen = (dbObj) => {
+    let apiObj = {
+        "room_id": dbObj.Room_ID,
+        "occupant": dbObj.Occupant,
+        "floor": dbObj.Floor,
+        "orders": []
+    }
+    for (let i = 0; i < dbObj.Orders.length; i++) {
+        apiObj.orders[i] = orderGen(dbObj.Orders[i]);
+    }
+    return apiObj;
+}
+
+// Create API-compliant error objects.
 global.errGen = (errCode, str) => {
     let desc;
     if (!str) {

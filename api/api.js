@@ -38,14 +38,7 @@ app.get("/api/inventory", authn.isAuthorized, async (req, res, next) => {
         db.collection('Inventory').find({}).toArray();
     let formatted = []
     for (let i = 0; i < results.length; i++) {
-        formatted[i] = {
-            "item_id": results[i].Item_ID,
-            "name": results[i].Name,
-            "description": results[i].Description,
-            "img": results[i].IMG,
-            // typo corrected in db as well.
-            "quantity": results[i].Quantity
-        }
+        formatted[i] = inventoryGen(results[i]);
     }
     return res.status(200).json(formatted);
 })
@@ -72,13 +65,7 @@ app.post("/api/inventory", [authn.isAuthorized, authn.isAdmin], async (req, res,
     // Insert, format, and then return.
     db.collection('Inventory').insertOne(obj).then((out) => {
         const results = out.ops[0];
-        return res.status(200).json({
-            "item_id": results.Item_ID,
-            "name": results.Name,
-            "description": results.Description,
-            "img": results.IMG,
-            "quantity": results.Quantity
-        });
+        return res.status(200).json(inventoryGen(results));
     }).catch((err) => {
         return res.status(500).json(errGen(500, err));
     });
@@ -100,6 +87,38 @@ app.delete("/api/inventory/:inventory_id", [authn.isAuthorized, authn.isAdmin], 
         return res.status(200).json(errGen(200, "Item successfully deleted."));
     }).catch((err) => {
         return res.status(500).json(errGen(500, err));
+    });
+});
+
+app.patch("/api/inventory/:inventory_id", [authn.isAuthorized, authn.isStaff], async (req, res, next) => {
+    // Get inventory ID and validate it is, indeed, a number.
+    let inventory_id = req.params.inventory_id;
+    try {
+        inventory_id = Number(inventory_id);
+        if (isNaN(inventory_id))
+            return res.status(400).json(errGen(400, "Invalid item ID."));
+    } catch(err) {
+        // If we can't cast a number
+        return res.status(400, "Invalid item ID.");
+    }
+
+    const {name, quantity, description, img} = req.body;
+    let newObj = {}
+    // Properties staff AND admin can edit.
+    if (quantity) newObj.Quantity = quantity;
+    // Properties ONLY admin can edit.
+    if (req.user.role === "admin") {
+        if (name) newObj.Name = name;
+        if (description) newObj.Description = description;
+        if (img) newObj.IMG = img;
+    }
+
+    db_client.db().collection('Inventory').findOneAndUpdate({Item_ID: inventory_id}, {$set: newObj})
+        .then((out) => {
+            return res.status(200).json(inventoryGen(out.value));
+            })
+        .catch((err) => {
+            return res.status(500).json(errGen(500, err));
     });
 });
 
