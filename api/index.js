@@ -41,7 +41,7 @@ global.accountGen = (dbObj) => {
         "user_id": dbObj.UserID,
         "role": dbObj.AccountType.toLowerCase(),
         "checkin": dbObj.CheckInDate,
-        "checkout": dbObj.checkoutDate,
+        "checkout": dbObj.CheckoutDate,
         "room": dbObj.RoomNumber,
         "username": dbObj.Login,
         "password": "**********",
@@ -62,17 +62,17 @@ global.inventoryGen = (dbObj) => {
 }
 global.orderGen = (dbObj) => {
     return {
-        "order_id": dbObj.Order_ID,
-        "room_id": dbObj.Room_ID,
+        "order_id": dbObj.OrderID,
+        "room_id": dbObj.RoomID,
         "staff": dbObj.Staff,
-        "item_id": dbObj.Item_ID,
+        "item_id": dbObj.ItemID,
         "quantity": dbObj.Quantity,
         "guest": dbObj.Guest
     }
 }
 global.roomGen = (dbObj) => {
     let apiObj = {
-        "room_id": dbObj.Room_ID,
+        "room_id": dbObj.RoomID,
         "occupant": dbObj.Occupant,
         "floor": dbObj.Floor,
         "orders": []
