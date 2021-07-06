@@ -3,7 +3,8 @@ const authn = require('./authn');
 
 exports.setApp = function (app, db_client) {
 
-// Login endpoint
+// Account Endpoints
+// Login 
 app.post("/api/account/login", async (req, res, next) => {
     // grab login and password from request
     const {username, password} = req.body;
@@ -32,6 +33,8 @@ app.post("/api/account/login", async (req, res, next) => {
         return res.status(401).json(errGen(401));
 })
 
+// Admin Endpoints
+// List all Items from Inventory
 app.get("/api/inventory", authn.isAuthorized, async (req, res, next) => {
     const db = db_client.db();
     const results = await
@@ -42,7 +45,7 @@ app.get("/api/inventory", authn.isAuthorized, async (req, res, next) => {
     }
     return res.status(200).json(formatted);
 })
-
+// Add Item to Inventory 
 app.post("/api/inventory", [authn.isAuthorized, authn.isAdmin], async (req, res, next) => {
     // Admin guard: authn.isAdmin. Requires isAuthorized to be called FIRST; Order matters a lot here!
     // Can be replaced with isStaff to check if an endpoint is available for staff and admin (not guest).
@@ -70,7 +73,7 @@ app.post("/api/inventory", [authn.isAuthorized, authn.isAdmin], async (req, res,
         return res.status(500).json(errGen(500, err));
     });
 })
-
+// Delete Item from Inventory
 app.delete("/api/inventory/:inventory_id", [authn.isAuthorized, authn.isAdmin], async (req, res, next) => {
     let inventory_id = req.params.inventory_id;
     try {
@@ -89,7 +92,7 @@ app.delete("/api/inventory/:inventory_id", [authn.isAuthorized, authn.isAdmin], 
         return res.status(500).json(errGen(500, err));
     });
 });
-
+// 
 app.patch("/api/inventory/:inventory_id", [authn.isAuthorized, authn.isStaff], async (req, res, next) => {
     // Get inventory ID and validate it is, indeed, a number.
     let inventory_id = req.params.inventory_id;
@@ -122,6 +125,25 @@ app.patch("/api/inventory/:inventory_id", [authn.isAuthorized, authn.isStaff], a
     });
 });
 
+// Guest Endpoints
+// Get Current Room Information
+app.get("/api/room/:room_id", async (req, res, next) => 
+{  
+    let room_id = req.params.room_id
+    const db = db_client.db()
+    const results = await 
+        db.collection('Room').find({RoomID:room_id}).toArray()
+    let formatted = []
+    formatted[0] = roomGen(results[0])
+    console.log(formatted[0].orders)
+    return res.status(200).json(formatted)
+})
+    
+// Orders an inventory item to a user's room
+
+// Get information on a specific inventory entry
+
+
 // bcrypt hash password function for POST/api/createAcc
 // const hashPassword = async (password, saltRounds = 10) => {
 //     try {
@@ -134,5 +156,6 @@ app.patch("/api/inventory/:inventory_id", [authn.isAuthorized, authn.isStaff], a
 //     // return null if error
 //     return null
 // }
+
 
 }
