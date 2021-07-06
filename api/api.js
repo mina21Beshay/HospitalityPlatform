@@ -127,7 +127,7 @@ app.patch("/api/inventory/:inventory_id", [authn.isAuthorized, authn.isStaff], a
 
 // Guest Endpoints
 // Get Current Room Information
-app.get("/api/room/:room_id", async (req, res, next) => 
+app.get("/api/room/:room_id", authn.isAuthorized, async (req, res, next) => 
 {  
     let room_id = req.params.room_id
     const db = db_client.db()
@@ -140,7 +140,7 @@ app.get("/api/room/:room_id", async (req, res, next) =>
 })
     
 // Orders an inventory item to a user's room
-
+app.get("/api/inventory/:iventory_id")
 // Get information on a specific inventory entry
 
 
