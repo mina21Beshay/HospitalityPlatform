@@ -135,14 +135,33 @@ app.get("/api/room/:room_id", authn.isAuthorized, async (req, res, next) =>
         db.collection('Room').find({RoomID:room_id}).toArray()
     let formatted = []
     formatted[0] = roomGen(results[0])
-    console.log(formatted[0].orders)
     return res.status(200).json(formatted)
 })
     
 // Orders an inventory item to a user's room
 
 // Get information on a specific inventory entry
-
+app.get("/api/inventory/:inventory_id", authn.isAuthorized, async (req, res, next) => {
+    let inventory_id = req.params.inventory_id
+    try {
+        inventory_id = Number(inventory_id);
+        if (isNaN(inventory_id))
+            return res.status(400).json(errGen(400, "Invalid item ID."));
+    } catch(err) {
+        // If we can't cast a number
+        return res.status(400, "Invalid item ID.");
+    }
+    const db = db_client.db()
+    const results = await 
+        db.collection('Inventory').find({Item_ID:inventory_id}).toArray()
+    if (results.length > 0) {
+        let formatted = []
+        formatted[0] = inventoryGen(results[0])
+        return res.status(200).json(formatted)
+    }
+    else
+        res.status(404).json(errGen(404,"Asset not found"))
+})
 
 // bcrypt hash password function for POST/api/createAcc
 // const hashPassword = async (password, saltRounds = 10) => {
