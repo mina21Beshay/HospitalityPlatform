@@ -140,7 +140,7 @@ app.get("/api/room/:room_id", authn.isAuthorized, async (req, res, next) =>
 })
     
 // Orders an inventory item to a user's room
-app.get("/api/inventory/:iventory_id")
+
 // Get information on a specific inventory entry
 
 
