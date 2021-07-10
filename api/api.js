@@ -136,7 +136,7 @@ app.get("/api/room/:room_id", authn.isAuthorized, async (req, res, next) =>
     let formatted = []
     formatted[0] = roomGen(results[0])
     return res.status(200).json(formatted)
-})
+});
     
 // Orders an inventory item to a user's room
 
@@ -161,7 +161,32 @@ app.get("/api/inventory/:inventory_id", authn.isAuthorized, async (req, res, nex
     }
     else
         res.status(404).json(errGen(404,"Asset not found"))
-})
+});
+    
+app.use('api/hotel', async(req, res, next) => {
+        
+        var error = '';
+
+        const db = client.db();
+        const results = await db.collection('Hotel').find({}).toArray();
+
+        var N = '';
+        var C = '';
+        var B = '';
+        var D = '';
+        var ret;
+
+        if(results.length > 0){
+            N = results[0].Name;
+            C = results[0].Color;
+            B = results[0].Background;
+            D = results[0].Description;
+        }else{
+            ret = {error: 'Where the Beep is the Hotel'}
+        }
+
+        res.status(200).json(ret);
+    });
 
 // bcrypt hash password function for POST/api/createAcc
 // const hashPassword = async (password, saltRounds = 10) => {
